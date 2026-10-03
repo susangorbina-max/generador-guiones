@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Marketing Digital para negocios - Generador de Guiones Publicitarios</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --navy:#0B1533;
+      --blue:#315CFF;
+      --blue-dark:#173DFF;
+      --lime:#C8FF2E;
+      --violet:#7767FF;
+      --bg:#F7F9FC;
+      --white:#ffffff;
+      --text:#182033;
+      --muted:#667085;
+      --line:#E7EAF0;
+      --success:#15A36D;
+      --shadow:0 18px 50px rgba(26, 43, 92, .10);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:linear-gradient(180deg,#F7F9FC 0%,#EEF2FF 100%);
+      color:var(--text);
+      min-height:100vh;
+    }
+    .topbar{
+      width:100%;
+      background:var(--navy);
+      color:#fff;
+      padding:18px 24px;
+      position:sticky;
+      top:0;
+      z-index:20;
+      box-shadow:0 6px 24px rgba(11,21,51,.16);
+    }
+    .topbar-inner{
+      max-width:1180px;
+      margin:auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-weight:800;
+      letter-spacing:-.02em;
+    }
+    .logo{
+      min-width:48px;height:38px;padding:0 10px;border-radius:12px;
+      display:grid;place-items:center;
+      background:linear-gradient(135deg,var(--blue),var(--violet));
+      color:#fff;
+      font-weight:800;
+      font-size:14px;
+      letter-spacing:.06em;
+    }
+    .tag{
+      font-size:12px;
+      color:#D8DEFF;
+      border:1px solid rgba(255,255,255,.18);
+      padding:7px 10px;
+      border-radius:999px;
+    }
+    main{max-width:1180px;margin:0 auto;padding:48px 24px 80px}
+    .hero{
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:28px;
+      align-items:center;
+      margin-bottom:32px;
+    }
+    .hero h1{
+      font-size:clamp(36px,5vw,64px);
+      line-height:.98;
+      margin:0 0 18px;
+      letter-spacing:-.055em;
+      color:var(--navy);
+    }
+    .hero h1 span{color:var(--blue)}
+    .hero p{
+      font-size:18px;
+      line-height:1.7;
+      color:var(--muted);
+      max-width:720px;
+      margin:0;
+    }
+    .hero-card{
+      background:var(--navy);
+      color:white;
+      padding:24px;
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    .hero-card:after{
+      content:"";
+      position:absolute;
+      width:170px;height:170px;
+      border-radius:50%;
+      background:var(--lime);
+      opacity:.16;
+      right:-50px;top:-45px;
+    }
+    .hero-card h3{margin:0 0 14px;font-size:19px}
+    .hero-card ul{margin:0;padding-left:18px;color:#D9E0FF;line-height:1.8;font-size:14px}
+    .layout{
+      display:grid;
+      grid-template-columns:420px 1fr;
+      gap:24px;
+      align-items:start;
+    }
+    .panel{
+      background:rgba(255,255,255,.95);
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .panel-head{
+      padding:22px 24px 18px;
+      border-bottom:1px solid var(--line);
+    }
+    .panel-head h2{margin:0;font-size:21px;color:var(--navy)}
+    .panel-head p{margin:7px 0 0;color:var(--muted);font-size:13px;line-height:1.5}
+    .form-wrap{padding:22px 24px 26px}
+    .field{margin-bottom:18px}
+    label{
+      display:block;
+      font-size:13px;
+      font-weight:700;
+      margin-bottom:8px;
+      color:var(--navy);
+    }
+    .optional{font-weight:500;color:#98A2B3}
+    input,textarea,select{
+      width:100%;
+      border:1px solid #DDE2EA;
+      background:white;
+      border-radius:13px;
+      padding:12px 13px;
+      font:inherit;
+      color:var(--text);
+      outline:none;
+      transition:.2s;
+    }
+    textarea{min-height:90px;resize:vertical;line-height:1.5}
+    input:focus,textarea:focus,select:focus{
+      border-color:var(--blue);
+      box-shadow:0 0 0 4px rgba(49,92,255,.10);
+    }
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .btn{
+      border:none;
+      cursor:pointer;
+      font:inherit;
+      font-weight:800;
+      border-radius:14px;
+      transition:.2s;
+    }
+    .btn-primary{
+      width:100%;
+      padding:14px 18px;
+      color:white;
+      background:linear-gradient(135deg,var(--blue),var(--blue-dark));
+      box-shadow:0 10px 25px rgba(49,92,255,.22);
+    }
+    .btn-primary:hover{transform:translateY(-1px)}
+    .tiny{font-size:12px;color:#98A2B3;line-height:1.5;margin-top:10px;text-align:center}
+    .results{
+      padding:24px;
+      min-height:520px;
+    }
+    .empty{
+      min-height:470px;
+      display:grid;
+      place-items:center;
+      text-align:center;
+      color:var(--muted);
+      padding:30px;
+    }
+    .empty-icon{
+      width:72px;height:72px;border-radius:20px;
+      display:grid;place-items:center;
+      background:#EEF2FF;
+      font-size:34px;
+      margin:0 auto 14px;
+    }
+    .empty h3{margin:0 0 8px;color:var(--navy)}
+    .results-top{
+      display:flex;justify-content:space-between;align-items:center;gap:16px;
+      margin-bottom:18px;
+    }
+    .results-top h2{margin:0;color:var(--navy);font-size:22px}
+    .results-top span{font-size:12px;color:var(--muted)}
+    .script-card{
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:20px;
+      padding:20px;
+      margin-bottom:16px;
+      box-shadow:0 10px 26px rgba(21,36,80,.05);
+    }
+    .script-card-head{
+      display:flex;justify-content:space-between;align-items:flex-start;gap:16px;
+      margin-bottom:14px;
+    }
+    .script-number{
+      display:flex;gap:12px;align-items:center;
+    }
+    .badge{
+      min-width:38px;height:38px;border-radius:11px;
+      display:grid;place-items:center;
+      color:white;background:var(--navy);
+      font-weight:800;
+    }
+    .script-card h3{margin:0;font-size:17px;color:var(--navy)}
+    .angle{font-size:12px;color:var(--blue);font-weight:700;margin-top:4px}
+    .actions{display:flex;gap:8px;flex-wrap:wrap}
+    .btn-small{
+      padding:8px 10px;
+      border-radius:10px;
+      border:1px solid var(--line);
+      background:#fff;
+      font-size:12px;
+      font-weight:700;
+      color:var(--navy);
+    }
+    .btn-small:hover{background:#F6F8FB}
+    .section{
+      padding:13px 0;
+      border-top:1px solid #F0F2F5;
+    }
+    .section:first-of-type{border-top:none}
+    .section-title{
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.09em;
+      font-weight:800;
+      color:#98A2B3;
+      margin-bottom:6px;
+    }
+    .section p{margin:0;line-height:1.65;font-size:14px}
+    .hook{
+      font-weight:800;
+      color:var(--navy);
+      font-size:15px !important;
+    }
+    .meta{
+      display:flex;gap:9px;flex-wrap:wrap;margin-top:14px;
+    }
+    .chip{
+      border-radius:999px;
+      padding:7px 10px;
+      font-size:11px;
+      background:#F4F6FA;
+      color:#576176;
+    }
+    .chip.green{background:#ECFFF7;color:#0C7A51}
+    .notice{
+      background:#F7F8FE;
+      border:1px solid #E3E6FA;
+      border-radius:15px;
+      padding:14px 15px;
+      font-size:12px;
+      color:#5F6680;
+      margin-bottom:16px;
+      line-height:1.55;
+    }
+    .loading{
+      display:none;
+      min-height:470px;
+      place-items:center;
+      text-align:center;
+    }
+    .spinner{
+      width:42px;height:42px;
+      border:4px solid #E5E9FF;
+      border-top-color:var(--blue);
+      border-radius:50%;
+      animation:spin .8s linear infinite;
+      margin:0 auto 14px;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .toast{
+      position:fixed;right:24px;bottom:24px;
+      background:var(--navy);color:white;
+      padding:12px 16px;border-radius:12px;
+      box-shadow:var(--shadow);
+      opacity:0;transform:translateY(12px);
+      pointer-events:none;transition:.25s;
+      z-index:99;font-size:13px;font-weight:700;
+    }
+    .toast.show{opacity:1;transform:translateY(0)}
+    @media(max-width:960px){
+      .hero,.layout{grid-template-columns:1fr}
+      .hero-card{display:none}
+    }
+    @media(max-width:600px){
+      main{padding:28px 14px 50px}
+      .topbar{padding:14px}
+      .tag{display:none}
+      .row{grid-template-columns:1fr}
+      .panel{border-radius:18px}
+      .results{padding:16px}
+      .script-card-head{flex-direction:column}
+      .hero h1{font-size:42px}
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="logo">SGC</div>
+        <div>SGC Marketing</div>
+      </div>
+      <div class="tag">5 ideas listas para grabar</div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <h1>Convierte una idea en <span>5 guiones</span> publicitarios.</h1>
+        <p>Cuéntanos qué vende tu negocio, qué quieres comunicar y cómo quieres cerrar el video. La herramienta te devuelve cinco enfoques diferentes, listos para adaptar y grabar.</p>
+      </div>
+      <aside class="hero-card">
+        <h3>¿Qué recibirás?</h3>
+        <ul>
+          <li>5 ángulos creativos diferentes</li>
+          <li>Hook, desarrollo y CTA</li>
+          <li>Recomendación visual para grabación</li>
+          <li>Adaptación por plataforma y duración</li>
+        </ul>
+      </aside>
+    </section>
+
+    <section class="layout">
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Cuéntanos sobre el video</h2>
+          <p>Mientras más específico seas, mejores serán los guiones.</p>
+        </div>
+
+        <form id="scriptForm" class="form-wrap">
+          <div class="field">
+            <label for="industry">¿A qué se dedica tu negocio?</label>
+            <input id="industry" required placeholder="Ej. Clínica dental, restaurante, inmobiliaria..." />
+          </div>
+
+          <div class="field">
+            <label for="offer">¿Qué producto, servicio u oferta quieres promocionar?</label>
+            <input id="offer" required placeholder="Ej. Blanqueamiento dental, menú ejecutivo..." />
+          </div>
+
+          <div class="field">
+            <label for="objective">¿Qué quieres lograr con este video?</label>
+            <select id="objective" required>
+              <option value="">Selecciona una opción</option>
+              <option>Vender</option>
+              <option>Conseguir mensajes por WhatsApp</option>
+              <option>Generar leads</option>
+              <option>Conseguir reservas</option>
+              <option>Aumentar visitas al negocio</option>
+              <option>Presentar un producto o servicio</option>
+              <option>Generar reconocimiento de marca</option>
+              <option>Educar o informar</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="topic">¿De qué quieres que trate el video?</label>
+            <textarea id="topic" required placeholder="Describe la idea principal del video..."></textarea>
+          </div>
+
+          <div class="field">
+            <label for="must">¿Qué información sí o sí quieres mencionar?</label>
+            <textarea id="must" required placeholder="Precio, beneficios, promoción, ubicación, diferenciadores..."></textarea>
+          </div>
+
+          <div class="field">
+            <label for="details">Detalles adicionales <span class="optional">(opcional)</span></label>
+            <textarea id="details" placeholder="Cualquier contexto que ayude a mejorar el guion..."></textarea>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label for="platform">¿Dónde publicarás?</label>
+              <select id="platform" required>
+                <option>Instagram Reels</option>
+                <option>TikTok</option>
+                <option>Facebook</option>
+                <option>YouTube Shorts</option>
+                <option>Anuncio de Meta</option>
+                <option>Otro</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="duration">Duración</label>
+              <select id="duration" required>
+                <option>15 segundos</option>
+                <option selected>30 segundos</option>
+                <option>45 segundos</option>
+                <option>60 segundos</option>
+                <option>60–90 segundos</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="style">Formato / estilo del video</label>
+            <select id="style" required>
+              <option>Hablando a cámara</option>
+              <option>Voz en off + imágenes</option>
+              <option>Demostración de producto</option>
+              <option>Problema → solución</option>
+              <option>Storytelling</option>
+              <option>Testimonial</option>
+              <option>UGC / natural</option>
+              <option>Educativo</option>
+              <option>Lista / tips</option>
+              <option>Antes y después</option>
+              <option>Promocional directo</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="cta">¿Qué quieres que haga la persona después?</label>
+            <select id="cta" required>
+              <option>Escribir por WhatsApp</option>
+              <option>Comprar ahora</option>
+              <option>Visitar la web</option>
+              <option>Reservar</option>
+              <option>Enviar un mensaje</option>
+              <option>Comentar una palabra</option>
+              <option>Seguir la cuenta</option>
+              <option>Guardar el video</option>
+              <option>Visitar el local</option>
+            </select>
+          </div>
+
+          <button class="btn btn-primary" type="submit">✨ Crear mis 5 guiones</button>
+          <div class="tiny">Esta versión funciona como prototipo. Puede conectarse luego a una API de IA real.</div>
+        </form>
+      </div>
+
+      <div class="panel">
+        <div id="results" class="results">
+          <div id="emptyState" class="empty">
+            <div>
+              <div class="empty-icon">✦</div>
+              <h3>Tus guiones aparecerán aquí</h3>
+              <p>Completa el formulario y genera cinco enfoques diferentes para tu próximo video.</p>
+            </div>
+          </div>
+
+          <div id="loadingState" class="loading">
+            <div>
+              <div class="spinner"></div>
+              <h3>Creando 5 enfoques...</h3>
+              <p>Buscando hooks, estructuras y llamadas a la acción.</p>
+            </div>
+          </div>
+
+          <div id="resultContent" style="display:none"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast">Guion copiado</div>
+
+<script>
+const form = document.getElementById('scriptForm');
+const emptyState = document.getElementById('emptyState');
+const loadingState = document.getElementById('loadingState');
+const resultContent = document.getElementById('resultContent');
+const toast = document.getElementById('toast');
+
+const angleLibrary = [
+  {
+    name:"Problema → solución",
+    hook:d=>`Si ${d.industry.toLowerCase()} es parte de tu día a día, probablemente ya te encontraste con este problema: ${shorten(d.topic, 105)}.`,
+    body:d=>`La buena noticia es que no tienes que complicarlo. Con ${d.offer}, puedes abordar este problema de una manera más simple y directa. ${cleanSentence(d.must)} ${d.details ? cleanSentence(d.details) : ""}`,
+    visual:d=>`Empieza mostrando el problema en una escena real. Luego pasa a ${d.style.toLowerCase()} y enseña cómo ${d.offer} ayuda a resolverlo.`
+  },
+  {
+    name:"Curiosidad",
+    hook:d=>`Hay algo que muchas personas no saben sobre ${d.topic.toLowerCase()}... y puede cambiar la forma en que lo estás haciendo.`,
+    body:d=>`La clave está en prestar atención a lo que realmente genera resultado. ${cleanSentence(d.must)} En este caso, ${d.offer} puede ser una alternativa concreta para conseguir ${d.objective.toLowerCase()}.`,
+    visual:d=>`Abre con texto grande en pantalla y un plano cercano. Revela la idea principal en 2 o 3 cortes rápidos.`
+  },
+  {
+    name:"Beneficio directo",
+    hook:d=>`¿Quieres ${goalPhrase(d.objective)} sin hacer el proceso más complicado de lo necesario?`,
+    body:d=>`${d.offer} está pensado para ayudarte justamente con eso. ${cleanSentence(d.must)} La idea es que el beneficio se entienda rápido y que la persona sepa exactamente por qué debería interesarle.`,
+    visual:d=>`Muestra primero el resultado o beneficio principal y después explica brevemente cómo se consigue.`
+  },
+  {
+    name:"Storytelling",
+    hook:d=>`Todo empezó con una pregunta muy simple: ¿cómo lograr ${goalPhrase(d.objective)} de una manera más efectiva?`,
+    body:d=>`A partir de ahí, encontramos una forma más clara de trabajar ${d.topic.toLowerCase()}. Hoy, con ${d.offer}, podemos ofrecer una solución enfocada en lo que realmente necesita el cliente. ${cleanSentence(d.must)}`,
+    visual:d=>`Usa una narrativa de inicio, proceso y resultado. Puede funcionar muy bien con voz en off y escenas reales del negocio.`
+  },
+  {
+    name:"Venta directa",
+    hook:d=>`Si estás buscando ${d.offer.toLowerCase()}, esto es lo que necesitas saber antes de decidir.`,
+    body:d=>`${cleanSentence(d.must)} ${d.details ? cleanSentence(d.details) : ""} Si esto es lo que estabas buscando, el siguiente paso es muy sencillo.`,
+    visual:d=>`Muestra el producto o servicio desde el primer segundo. Usa textos breves en pantalla para reforzar precio, beneficio o promoción.`
+  }
+];
+
+function value(id){ return document.getElementById(id).value.trim(); }
+
+function cleanSentence(text){
+  if(!text) return "";
+  text = text.trim();
+  return /[.!?]$/.test(text) ? text : text + ".";
+}
+
+function shorten(text, n){
+  const t = text.trim();
+  return t.length <= n ? t : t.slice(0,n-1).trim() + "…";
+}
+
+function goalPhrase(obj){
+  const map = {
+    "Vender":"generar más ventas",
+    "Conseguir mensajes por WhatsApp":"recibir más consultas por WhatsApp",
+    "Generar leads":"conseguir nuevos contactos interesados",
+    "Conseguir reservas":"conseguir más reservas",
+    "Aumentar visitas al negocio":"llevar más personas a tu negocio",
+    "Presentar un producto o servicio":"presentar mejor tu oferta",
+    "Generar reconocimiento de marca":"hacer que más personas recuerden tu marca",
+    "Educar o informar":"explicar este tema de forma clara"
+  };
+  return map[obj] || obj.toLowerCase();
+}
+
+function ctaText(cta, offer){
+  const map = {
+    "Escribir por WhatsApp":`Escríbenos por WhatsApp y te contamos cómo acceder a ${offer}.`,
+    "Comprar ahora":`Compra ahora y da el siguiente paso con ${offer}.`,
+    "Visitar la web":`Visita nuestra web y conoce todos los detalles de ${offer}.`,
+    "Reservar":`Reserva ahora y asegura tu espacio.`,
+    "Enviar un mensaje":`Envíanos un mensaje y te damos toda la información.`,
+    "Comentar una palabra":`Comenta “INFO” y te enviamos los detalles.`,
+    "Seguir la cuenta":`Síguenos para encontrar más contenido como este.`,
+    "Guardar el video":`Guarda este video para tener esta información a la mano.`,
+    "Visitar el local":`Visítanos y conoce ${offer} en persona.`
+  };
+  return map[cta] || cta;
+}
+
+function buildScript(data, angle, idx){
+  return {
+    title:`Guion ${idx+1}`,
+    angle:angle.name,
+    hook:angle.hook(data),
+    body:angle.body(data),
+    cta:ctaText(data.cta, data.offer),
+    visual:angle.visual(data),
+    duration:data.duration,
+    platform:data.platform,
+    style:data.style
+  }
+}
+
+function scriptToText(s){
+  return `${s.title} — ${s.angle}\n\nHOOK\n${s.hook}\n\nDESARROLLO\n${s.body}\n\nCTA\n${s.cta}\n\nRECOMENDACIÓN VISUAL\n${s.visual}\n\nDuración: ${s.duration}\nPlataforma: ${s.platform}\nEstilo: ${s.style}`;
+}
+
+function showToast(msg){
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(()=>toast.classList.remove('show'),1800);
+}
+
+function renderScripts(scripts, data){
+  resultContent.innerHTML = `
+    <div class="results-top">
+      <div>
+        <h2>5 guiones para ${escapeHtml(data.offer)}</h2>
+        <span>${escapeHtml(data.industry)} · ${escapeHtml(data.platform)} · ${escapeHtml(data.duration)}</span>
+      </div>
+    </div>
+    <div class="notice">
+      Cada opción utiliza un ángulo diferente. Puedes copiarla tal como está o usarla como base para tu grabación.
+    </div>
+    ${scripts.map((s,i)=>`
+      <article class="script-card">
+        <div class="script-card-head">
+          <div class="script-number">
+            <div class="badge">${i+1}</div>
+            <div>
+              <h3>${escapeHtml(s.title)}</h3>
+              <div class="angle">${escapeHtml(s.angle)}</div>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="btn btn-small" onclick="copyScript(${i})">Copiar</button>
+            <button class="btn btn-small" onclick="regenerate(${i})">Regenerar</button>
+            <button class="btn btn-small" onclick="shortenScript(${i})">Más corto</button>
+          </div>
+        </div>
+        <div class="section">
+          <div class="section-title">Hook</div>
+          <p class="hook">${escapeHtml(s.hook)}</p>
+        </div>
+        <div class="section">
+          <div class="section-title">Desarrollo</div>
+          <p>${escapeHtml(s.body)}</p>
+        </div>
+        <div class="section">
+          <div class="section-title">CTA</div>
+          <p>${escapeHtml(s.cta)}</p>
+        </div>
+        <div class="section">
+          <div class="section-title">Recomendación visual</div>
+          <p>${escapeHtml(s.visual)}</p>
+        </div>
+        <div class="meta">
+          <div class="chip">${escapeHtml(s.duration)}</div>
+          <div class="chip">${escapeHtml(s.platform)}</div>
+          <div class="chip green">${escapeHtml(s.style)}</div>
+        </div>
+      </article>
+    `).join("")}
+  `;
+}
+
+function escapeHtml(str){
+  return str.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+}
+
+let currentScripts = [];
+let currentData = null;
+
+window.copyScript = async function(i){
+  const txt = scriptToText(currentScripts[i]);
+  await navigator.clipboard.writeText(txt);
+  showToast("Guion copiado");
+}
+
+window.regenerate = function(i){
+  const s = currentScripts[i];
+  s.hook = s.hook.startsWith("¿") 
+    ? `Antes de seguir, piensa en esto: ${shorten(currentData.topic,120)}.`
+    : `¿Y si hubiera una forma más simple de ${goalPhrase(currentData.objective)}?`;
+  s.body = `${currentData.offer} puede ayudarte a trabajar este objetivo de forma más clara. ${cleanSentence(currentData.must)} ${currentData.details ? cleanSentence(currentData.details) : ""}`;
+  renderScripts(currentScripts,currentData);
+  showToast("Guion regenerado");
+}
+
+window.shortenScript = function(i){
+  const s = currentScripts[i];
+  s.hook = shorten(s.hook,85);
+  s.body = shorten(s.body,170);
+  s.visual = shorten(s.visual,120);
+  renderScripts(currentScripts,currentData);
+  showToast("Versión más corta creada");
+}
+
+form.addEventListener('submit', e=>{
+  e.preventDefault();
+
+  const data = {
+    industry:value('industry'),
+    offer:value('offer'),
+    objective:value('objective'),
+    topic:value('topic'),
+    must:value('must'),
+    details:value('details'),
+    platform:value('platform'),
+    duration:value('duration'),
+    style:value('style'),
+    cta:value('cta')
+  };
+
+  emptyState.style.display='none';
+  resultContent.style.display='none';
+  loadingState.style.display='grid';
+
+  setTimeout(()=>{
+    currentData = data;
+    currentScripts = angleLibrary.map((a,i)=>buildScript(data,a,i));
+    loadingState.style.display='none';
+    resultContent.style.display='block';
+    renderScripts(currentScripts,data);
+    if(window.innerWidth < 960){
+      document.querySelector('.panel:last-child').scrollIntoView({behavior:'smooth',block:'start'});
+    }
+  },750);
+});
+</script>
+</body>
+</html>
