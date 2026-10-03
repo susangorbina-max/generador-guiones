@@ -502,7 +502,7 @@
           </div>
 
           <button class="btn btn-primary" type="submit">✨ Crear mis 5 guiones</button>
-          <div class="tiny">Versión 2 · Generación local mejorada con contexto, rubro, cliente ideal, tono y diferentes ángulos creativos.</div>
+          <div class="tiny">Versión 3 · El cliente ideal se usa solo como contexto y las respuestas se reinterpretan antes de redactar.</div>
         </form>
       </div>
 
@@ -540,46 +540,33 @@ const resultContent = document.getElementById('resultContent');
 const toast = document.getElementById('toast');
 
 function value(id){ return document.getElementById(id).value.trim(); }
-function cap(s){ return s ? s.charAt(0).toUpperCase() + s.slice(1) : ""; }
 function normalize(s){ return (s || "").trim().replace(/\s+/g," "); }
-function sentence(s){
-  s = normalize(s);
-  if(!s) return "";
-  s = cap(s);
-  return /[.!?]$/.test(s) ? s : s + ".";
-}
-function lowerFirst(s){ return s ? s.charAt(0).toLowerCase() + s.slice(1) : ""; }
+function cap(s){ s=normalize(s); return s ? s.charAt(0).toUpperCase()+s.slice(1) : ""; }
+function lowerFirst(s){ s=normalize(s); return s ? s.charAt(0).toLowerCase()+s.slice(1) : ""; }
 function shorten(s,n){ s=normalize(s); return s.length<=n?s:s.slice(0,n-1).trim()+"…"; }
 function pick(arr, seed=0){ return arr[Math.abs(seed)%arr.length]; }
-function hashText(s){
-  let h=0;
-  for(let i=0;i<s.length;i++) h=((h<<5)-h)+s.charCodeAt(i)|0;
-  return Math.abs(h);
-}
-function escapeHtml(str){
-  return String(str || "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
-}
+function hashText(s){ let h=0; for(let i=0;i<s.length;i++) h=((h<<5)-h)+s.charCodeAt(i)|0; return Math.abs(h); }
+function escapeHtml(str){ return String(str||"").replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m])); }
 
 function extractPrice(text){
-  text = text || "";
-  let m = text.match(/(?:S\/\.?\s*|S\/\s*)(\d+(?:[.,]\d{1,2})?)/i);
+  text=text||"";
+  let m=text.match(/(?:S\/\.?\s*|S\/\s*)(\d+(?:[.,]\d{1,2})?)/i);
   if(m) return `S/${m[1]}`;
-  m = text.match(/\$\s*(\d+(?:[.,]\d{1,2})?)/i);
+  m=text.match(/\$\s*(\d+(?:[.,]\d{1,2})?)/i);
   if(m) return `$${m[1]}`;
-  m = text.match(/(\d+(?:[.,]\d{1,2})?)\s*soles?/i);
+  m=text.match(/(\d+(?:[.,]\d{1,2})?)\s*soles?/i);
   if(m) return `S/${m[1]}`;
   return "";
 }
+
 function extractUrgency(text){
   const t=(text||"").toLowerCase();
-  const week=t.match(/(?:solo\s+)?(?:por\s+)?(\d+|una)\s+semanas?/i);
-  if(week) return week[1]==="una" ? "solo por una semana" : `solo por ${week[1]} semanas`;
-  const days=t.match(/(?:solo\s+)?(?:por\s+)?(\d+)\s+d[ií]as?/i);
-  if(days) return `solo por ${days[1]} días`;
-  if(/hasta\s+(?:el\s+)?[^,.]+/i.test(text||"")) {
-    const m=(text||"").match(/hasta\s+(?:el\s+)?([^,.]+)/i);
-    if(m) return `hasta ${m[1].trim()}`;
-  }
+  let m=t.match(/(?:solo\s+)?(?:por\s+)?(\d+|una)\s+semanas?/i);
+  if(m) return m[1]==="una" ? "solo por una semana" : `solo por ${m[1]} semanas`;
+  m=t.match(/(?:solo\s+)?(?:por\s+)?(\d+)\s+d[ií]as?/i);
+  if(m) return `solo por ${m[1]} días`;
+  m=(text||"").match(/hasta\s+(?:el\s+)?([^,.]+)/i);
+  if(m) return `hasta ${m[1].trim()}`;
   if(/tiempo limitado|promoci[oó]n limitada|cupos limitados/i.test(t)) return "por tiempo limitado";
   return "";
 }
@@ -587,67 +574,59 @@ function extractUrgency(text){
 const profiles = {
   dental:{
     test:/dental|odont|dentista|blanqueamiento|ortodoncia|implante|carilla/i,
-    noun:"tratamiento",
-    benefits:["mejorar el aspecto de tu sonrisa","sentirte más cómodo al sonreír","conseguir una sonrisa visualmente más luminosa"],
+    articleOffer:(offer)=>/blanqueamiento|tratamiento|implante/i.test(offer.toLowerCase()) ? `un buen ${offer}` : `un ${offer}`,
+    benefits:[
+      "lucir una sonrisa más luminosa",
+      "mejorar visualmente el tono de tus dientes",
+      "sentirte más cómodo al sonreír"
+    ],
+    pains:[
+      "sientes que el tono de tus dientes apaga tu sonrisa",
+      "te gustaría sonreír con más seguridad",
+      "quieres mejorar el aspecto de tu sonrisa"
+    ],
     visuals:["primer plano de una sonrisa","toma del consultorio","detalle del procedimiento","resultado final con una sonrisa natural"],
-    authority:"atención profesional",
-    verbs:["mejorar","cuidar","renovar"]
+    authority:["atención profesional","un procedimiento bien realizado","una experiencia cuidada"]
   },
   restaurant:{
     test:/restaurante|comida|cevicher|poller|cafeter|pizzer|sushi|men[uú]|postre|hamburg/i,
-    noun:"opción",
-    benefits:["disfrutar algo rico sin complicarte","probar una opción que realmente provoque","convertir una comida normal en un momento especial"],
+    articleOffer:(offer)=>offer,
+    benefits:["disfrutar una opción que realmente provoque","convertir una comida normal en un momento especial","probar algo rico sin complicarte"],
+    pains:["quieres comer algo distinto y no sabes qué elegir","buscas una opción rica para compartir","te provoca darte un gusto"],
     visuals:["primer plano del plato","preparación en cocina","producto servido","cliente disfrutando el plato"],
-    authority:"buena preparación y una experiencia cuidada",
-    verbs:["disfrutar","probar","descubrir"]
+    authority:["buena preparación","ingredientes bien trabajados","una experiencia cuidada"]
   },
   beauty:{
     test:/est[eé]tica|sal[oó]n|spa|cabello|uñas|manicure|facial|depil|maquill|belleza/i,
-    noun:"servicio",
+    articleOffer:(offer)=>offer,
     benefits:["verte y sentirte mejor","resaltar tu imagen de una forma natural","conseguir un cambio visible sin perder tu estilo"],
+    pains:["sientes que necesitas renovar tu imagen","quieres verte mejor sin exagerar el resultado","buscas un cambio que se vea natural"],
     visuals:["antes del servicio","detalle del proceso","resultado final","reacción de la clienta o cliente"],
-    authority:"atención personalizada",
-    verbs:["renovar","resaltar","mejorar"]
-  },
-  realestate:{
-    test:/inmobili|departamento|casa|terreno|propiedad|lote|alquiler|venta de inmueble/i,
-    noun:"oportunidad",
-    benefits:["encontrar una opción que encaje con lo que buscas","tomar una decisión con información más clara","acercarte a una propiedad que sí tenga sentido para ti"],
-    visuals:["fachada o vista principal","recorrido por ambientes","detalle de ubicación","datos clave en pantalla"],
-    authority:"información clara y acompañamiento",
-    verbs:["encontrar","evaluar","invertir"]
+    authority:["atención personalizada","un resultado cuidado","una experiencia profesional"]
   },
   education:{
     test:/curso|taller|academia|escuela|capacit|clase|mentor|formaci[oó]n/i,
-    noun:"programa",
+    articleOffer:(offer)=>offer,
     benefits:["aprender de forma práctica","aplicar lo aprendido desde el primer día","avanzar con una ruta más clara"],
+    pains:["quieres aprender pero no sabes por dónde empezar","te cuesta pasar de la teoría a la práctica","buscas una forma más clara de avanzar"],
     visuals:["docente explicando","pantalla o material de clase","alumnos trabajando","resultado o proyecto final"],
-    authority:"metodología práctica",
-    verbs:["aprender","aplicar","avanzar"]
+    authority:["metodología práctica","acompañamiento claro","contenido aplicable"]
   },
-  fitness:{
-    test:/gym|gimnasio|fitness|entrenamiento|nutrici[oó]n|personal trainer|ejercicio/i,
-    noun:"programa",
-    benefits:["avanzar hacia tu objetivo con mayor estructura","entrenar con una ruta más clara","convertir la constancia en progreso"],
-    visuals:["persona entrenando","detalle de ejercicio","acompañamiento del entrenador","progreso o energía al finalizar"],
-    authority:"acompañamiento profesional",
-    verbs:["entrenar","avanzar","mejorar"]
-  },
-  pets:{
-    test:/veterin|mascota|perro|gato|pet shop|peluquer[ií]a canina/i,
-    noun:"servicio",
-    benefits:["cuidar mejor a tu mascota","darle una atención más cómoda y segura","mantener su bienestar con una atención adecuada"],
-    visuals:["mascota antes del servicio","atención o cuidado","detalle del proceso","mascota tranquila al finalizar"],
-    authority:"cuidado responsable",
-    verbs:["cuidar","proteger","atender"]
+  realestate:{
+    test:/inmobili|departamento|casa|terreno|propiedad|lote|alquiler|venta de inmueble/i,
+    articleOffer:(offer)=>offer,
+    benefits:["encontrar una opción que realmente encaje contigo","tomar una decisión con información más clara","acercarte a una propiedad que tenga sentido para ti"],
+    pains:["te cuesta encontrar una propiedad que encaje con lo que buscas","no quieres tomar una decisión apresurada","buscas una opción con buena relación entre ubicación y valor"],
+    visuals:["fachada o vista principal","recorrido por ambientes","detalle de ubicación","datos clave en pantalla"],
+    authority:["información clara","acompañamiento","datos relevantes para decidir"]
   },
   generic:{
     test:/.*/,
-    noun:"solución",
+    articleOffer:(offer)=>offer,
     benefits:["obtener un resultado más claro","resolver una necesidad concreta","dar el siguiente paso con mayor seguridad"],
+    pains:["quieres mejorar un resultado pero no sabes por dónde empezar","buscas una mejor alternativa","quieres resolver una necesidad concreta"],
     visuals:["situación inicial","producto o servicio en uso","detalle del proceso","resultado final"],
-    authority:"una propuesta pensada para el cliente",
-    verbs:["mejorar","resolver","avanzar"]
+    authority:["una propuesta clara","una buena experiencia","un servicio bien trabajado"]
   }
 };
 
@@ -656,93 +635,134 @@ function profileFor(d){
   return Object.values(profiles).find(p=>p!==profiles.generic && p.test.test(text)) || profiles.generic;
 }
 
-function naturalOffer(d, p){
-  const offer=normalize(d.offer);
-  const low=offer.toLowerCase();
-  if(/^un |^una |^el |^la |^los |^las /.test(low)) return offer;
-  const feminine=/ción$|dad$|tad$|tud$|umbre$|sis$|itis$|ie$/.test(low);
-  if(/servicio|tratamiento|curso|taller|programa|plan|menú|menu|blanqueamiento|implante|departamento|producto/i.test(low)){
-    if(/blanqueamiento|tratamiento|curso|taller|programa|plan|menú|menu|implante|departamento|producto/i.test(low)) return `un buen ${offer}`;
+/* El público objetivo se usa SOLO como contexto interno.
+   Nunca se devuelve literalmente en el speech. */
+function audienceContext(d){
+  const a=normalize(d.audience).toLowerCase();
+  const ctx={age:"general",gender:"general",intent:"general"};
+  const age=a.match(/(\d{2})\s*(?:a|y|-)\s*(\d{2})/);
+  if(age){
+    const avg=(+age[1]+ +age[2])/2;
+    ctx.age=avg<25?"young":avg<45?"adult":"mature";
   }
-  if(/asesor[ií]a|consulta|promoci[oó]n|limpieza|sesión|sesion|clase|evaluaci[oó]n/i.test(low)) return `una buena ${offer}`;
-  return `${p.noun==="oportunidad" ? "esta" : feminine ? "una" : "un buen"} ${offer}`;
+  if(/mujer|femenin/.test(a)) ctx.gender="female";
+  else if(/hombre|masculin/.test(a)) ctx.gender="male";
+  if(/negocio|emprendedor|empresa/.test(a)) ctx.intent="business";
+  return ctx;
 }
 
-function cleanedMust(d){
-  let t=normalize(d.must);
-  if(!t) return "";
-  // Remove conversational filler that shouldn't be copied verbatim
-  t=t.replace(/^(que\s+)?(tenemos|tengo|contamos con)\s+/i,"");
-  t=t.replace(/^(que\s+)?/i,"");
-  return t;
+function toneFromAudience(d){
+  const ctx=audienceContext(d);
+  if(ctx.age==="young") return {pace:"ágil",wording:"simple"};
+  if(ctx.age==="mature") return {pace:"claro",wording:"sereno"};
+  return {pace:"natural",wording:"claro"};
+}
+
+function transformPain(d,p,idx){
+  const raw=normalize(d.pain).toLowerCase();
+
+  if(p===profiles.dental){
+    if(/confianza|seguridad/.test(raw)) return pick([
+      "te gustaría sentirte más seguro cada vez que sonríes",
+      "quieres volver a sonreír con más confianza",
+      "sientes que podrías disfrutar más tu sonrisa"
+    ],idx);
+    if(/amarill|tono|mancha|oscuro|opaco/.test(raw)) return pick([
+      "sientes que el tono de tus dientes apaga tu sonrisa",
+      "notas tus dientes más opacos de lo que te gustaría",
+      "quieres que tu sonrisa se vea más luminosa"
+    ],idx);
+  }
+
+  if(/confianza|seguridad/.test(raw)) return pick([
+    "te gustaría sentirte más seguro con el resultado",
+    "quieres sentirte más cómodo con tu decisión",
+    "buscas una opción que te dé mayor confianza"
+  ],idx);
+
+  if(/precio|caro|cost/.test(raw)) return pick([
+    "quieres una buena opción sin pagar de más",
+    "buscas cuidar tu presupuesto sin sacrificar calidad",
+    "quieres encontrar una alternativa que valga la pena"
+  ],idx);
+
+  return pick(p.pains,idx);
+}
+
+function transformDifferentiator(d,p,idx){
+  const raw=normalize(d.differentiator).toLowerCase();
+
+  if(/calidad.*resultado|resultado.*calidad/.test(raw)){
+    return pick([
+      "un resultado cuidado y bien trabajado",
+      "un enfoque pensado en conseguir un buen resultado",
+      "una atención enfocada en cuidar cada detalle del resultado"
+    ],idx);
+  }
+  if(/profesional|experiencia|especialista|experto/.test(raw)){
+    return pick([
+      "atención profesional durante todo el proceso",
+      "una experiencia respaldada por profesionales",
+      "acompañamiento profesional de principio a fin"
+    ],idx);
+  }
+  if(/r[aá]pid|tiempo|inmediato/.test(raw)){
+    return pick([
+      "un proceso ágil y práctico",
+      "una atención pensada para optimizar tu tiempo",
+      "una experiencia sencilla y rápida"
+    ],idx);
+  }
+  if(/personaliz|personal/.test(raw)){
+    return pick([
+      "una atención adaptada a cada caso",
+      "un servicio pensado según lo que realmente necesitas",
+      "una experiencia más personalizada"
+    ],idx);
+  }
+  if(/precio|econ[oó]mic|accesible/.test(raw)){
+    return pick([
+      "una propuesta con buena relación entre valor y precio",
+      "una opción accesible sin dejar de cuidar la experiencia",
+      "una alternativa pensada para aprovechar mejor tu presupuesto"
+    ],idx);
+  }
+
+  return pick(p.authority,idx);
 }
 
 function promotionInfo(d){
   const text=[d.must,d.details].join(" ");
-  const price=extractPrice(text);
-  const urgency=extractUrgency(text);
-  return {price, urgency};
+  return {price:extractPrice(text),urgency:extractUrgency(text)};
 }
 
-function offerLine(d, where="mid"){
+function promotionSentence(d, idx=0, position="mid"){
   if(d.offerPosition==="No mencionar precio") return "";
   const {price,urgency}=promotionInfo(d);
   if(!price && !/promoci[oó]n|oferta|descuento/i.test(d.must+" "+d.details)) return "";
   const time=urgency ? ` ${urgency}` : "";
-  if(price) {
-    if(where==="start") return `Ahora puedes acceder a ${d.offer} por ${price}${time}.`;
-    return `Además, ${d.offer} está disponible por ${price}${time}.`;
+
+  if(price){
+    const variants = position==="start" ? [
+      `Esta semana puedes acceder a ${d.offer} por ${price}${time}.`,
+      `Tenemos ${d.offer} por ${price}${time}.`,
+      `Aprovecha ${d.offer} por ${price}${time}.`
+    ] : [
+      `Además, por ahora puedes acceder a ${d.offer} por ${price}${time}.`,
+      `Y si estabas esperando una oportunidad, ${d.offer} está disponible por ${price}${time}.`,
+      `Por tiempo promocional, puedes realizarte ${d.offer} por ${price}${time}.`
+    ];
+    return pick(variants,idx);
   }
-  return urgency ? `Además, tenemos una condición especial ${urgency}.` : `Además, tenemos una condición especial disponible.`;
+  return urgency ? `Además, tenemos una condición especial ${urgency}.` : "";
 }
 
-function mainBenefit(d,p,idx=0){
-  const explicit=normalize(d.differentiator);
-  const profileBenefit=pick(p.benefits, hashText(d.offer)+idx);
-  if(explicit && explicit.length < 105){
-    const cleaned=explicit.replace(/^(tenemos|ofrecemos|contamos con)\s+/i,"");
-    return `${cap(profileBenefit)} y hacerlo con ${lowerFirst(cleaned)}.`;
-  }
-  return `${cap(profileBenefit)}.`;
+function naturalOffer(d,p){
+  return p.articleOffer(normalize(d.offer));
 }
 
-function audiencePhrase(d){
-  const a=normalize(d.audience);
-  if(!a) return "personas que buscan una mejor opción";
-  return a.replace(/^(mujeres y hombres|personas|clientes)\s+/i, m=>m.toLowerCase());
-}
-
-function painPhrase(d){
-  let p=normalize(d.pain);
-  if(!p) return "sientes que todavía no consigues el resultado que buscas";
-  p=p.replace(/^(siente que|sienten que|quiere|quieren)\s+/i,"");
-  return lowerFirst(p);
-}
-
-function toneAdjust(text,d){
-  text=normalize(text);
-  if(d.tone==="Profesional"){
-    return text.replace(/mira esta promoción/gi,"conoce esta propuesta").replace(/te contamos/gi,"te brindamos la información");
-  }
-  if(d.tone==="Directo y vendedor"){
-    return text.replace(/puede ayudarte a/gi,"te ayuda a").replace(/podría/gi,"puede");
-  }
-  if(d.tone==="Cercano y natural"){
-    return text.replace(/acceder a/gi,"probar").replace(/obtener/gi,"conseguir");
-  }
-  return text;
-}
-
-function avoidFilter(text,d){
-  const avoid=normalize(d.avoid).toLowerCase();
-  if(!avoid) return text;
-  if(/garantiz|garantía|garantia/.test(avoid)){
-    text=text.replace(/\bgarantizad[oa]s?\b/gi,"esperado").replace(/\bgarantía\b/gi,"respaldo");
-  }
-  if(/descuento/.test(avoid)){
-    text=text.replace(/\bdescuento\b/gi,"condición especial");
-  }
-  return text;
+function benefit(d,p,idx){
+  return pick(p.benefits,idx);
 }
 
 function finalPolish(text,d){
@@ -751,153 +771,135 @@ function finalPolish(text,d){
     .replace(/\.\s*\./g,".")
     .replace(/,\s*,/g,",")
     .replace(/\bcon con\b/gi,"con")
+    .replace(/\bde de\b/gi,"de")
     .replace(/\bun buen una\b/gi,"una buena")
-    .replace(/\buna buen\b/gi,"una buena");
-  text=toneAdjust(text,d);
-  text=avoidFilter(text,d);
+    .replace(/\buna buen\b/gi,"una buena")
+    .replace(/\bpuede ser una buena alternativa para mejorar\b/gi,"puede ayudarte a mejorar")
+    .replace(/\bestá disponible por\b/gi,"puedes acceder a él por");
+
+  if(d.tone==="Profesional"){
+    text=text.replace(/mira esta promoción/gi,"conoce esta propuesta")
+             .replace(/te contamos/gi,"te brindamos la información");
+  } else if(d.tone==="Directo y vendedor"){
+    text=text.replace(/puede ayudarte a/gi,"te ayuda a");
+  } else if(d.tone==="Cercano y natural"){
+    text=text.replace(/acceder a/gi,"aprovechar");
+  }
+
+  const avoid=normalize(d.avoid).toLowerCase();
+  if(/garantiz|garantía|garantia/.test(avoid)){
+    text=text.replace(/\bgarantizad[oa]s?\b/gi,"esperado");
+  }
+  if(/descuento/.test(avoid)){
+    text=text.replace(/\bdescuento\b/gi,"condición especial");
+  }
+
   return text;
 }
 
-function ctaText(d, idx=0){
+function ctaText(d,idx){
   const variants={
     "Escribir por WhatsApp":[
       "Escríbenos por WhatsApp y te enviamos todos los detalles.",
-      "¿Quieres más información? Escríbenos por WhatsApp y conversemos.",
+      "¿Quieres más información? Escríbenos por WhatsApp y te orientamos.",
       "Envíanos un mensaje por WhatsApp y consulta disponibilidad."
     ],
-    "Comprar ahora":[
-      "Compra ahora y aprovecha esta oportunidad.",
-      "Haz tu compra hoy y da el siguiente paso.",
-      "Si esto es para ti, compra ahora."
-    ],
-    "Visitar la web":[
-      "Visita nuestra web y revisa todos los detalles.",
-      "Encuentra toda la información en nuestra web.",
-      "Entra a nuestra web y conoce la propuesta completa."
-    ],
-    "Reservar":[
-      "Reserva ahora y asegura tu espacio.",
-      "Agenda tu reserva y consulta los horarios disponibles.",
-      "Reserva hoy y separa tu espacio."
-    ],
-    "Enviar un mensaje":[
-      "Envíanos un mensaje y te damos toda la información.",
-      "Escríbenos y resolvemos tus dudas.",
-      "Mándanos un mensaje para conocer los detalles."
-    ],
-    "Comentar una palabra":[
-      "Comenta “INFO” y te enviamos los detalles.",
-      "Escribe “INFO” en los comentarios y te contamos cómo funciona.",
-      "Comenta “QUIERO” y te mandamos la información."
-    ],
-    "Seguir la cuenta":[
-      "Síguenos para encontrar más contenido como este.",
-      "Síguenos y descubre más consejos y novedades.",
-      "Si te sirvió, síguenos para ver más."
-    ],
-    "Guardar el video":[
-      "Guarda este video para tener esta información a la mano.",
-      "Guárdalo para revisarlo cuando lo necesites.",
-      "Si te sirve, guarda este video."
-    ],
-    "Visitar el local":[
-      "Visítanos y conoce la experiencia en persona.",
-      "Ven a nuestro local y te contamos todos los detalles.",
-      "Te esperamos en nuestro local."
-    ]
+    "Comprar ahora":["Compra ahora y aprovecha esta oportunidad.","Haz tu compra hoy y da el siguiente paso.","Si esto es para ti, compra ahora."],
+    "Visitar la web":["Visita nuestra web y revisa todos los detalles.","Encuentra toda la información en nuestra web.","Entra a nuestra web y conoce la propuesta completa."],
+    "Reservar":["Reserva ahora y asegura tu espacio.","Agenda tu reserva y consulta los horarios disponibles.","Reserva hoy y separa tu espacio."],
+    "Enviar un mensaje":["Envíanos un mensaje y te damos toda la información.","Escríbenos y resolvemos tus dudas.","Mándanos un mensaje para conocer los detalles."],
+    "Comentar una palabra":["Comenta “INFO” y te enviamos los detalles.","Escribe “INFO” en los comentarios y te contamos cómo funciona.","Comenta “QUIERO” y te mandamos la información."],
+    "Seguir la cuenta":["Síguenos para encontrar más contenido como este.","Síguenos y descubre más consejos y novedades.","Si te sirvió, síguenos para ver más."],
+    "Guardar el video":["Guarda este video para tener esta información a la mano.","Guárdalo para revisarlo cuando lo necesites.","Si te sirve, guarda este video."],
+    "Visitar el local":["Visítanos y conoce la experiencia en persona.","Ven a nuestro local y te contamos todos los detalles.","Te esperamos en nuestro local."]
   };
-  return pick(variants[d.cta] || [d.cta], idx + hashText(d.offer));
+  return pick(variants[d.cta]||[d.cta],idx+hashText(d.offer));
 }
 
-function screenText(d, angle){
+function screenText(d,angle){
   const {price,urgency}=promotionInfo(d);
-  const items=[angle, cap(d.offer)];
+  const items=[angle,cap(d.offer)];
   if(price && d.offerPosition!=="No mencionar precio") items.push(price);
   if(urgency) items.push(cap(urgency));
   return items.slice(0,4).join(" · ");
 }
 
 function visualGuide(d,p,idx){
-  const v1=pick(p.visuals,idx);
-  const v2=pick(p.visuals,idx+1);
-  const styleMap={
+  const v1=pick(p.visuals,idx), v2=pick(p.visuals,idx+1);
+  const map={
     "Hablando a cámara":`Empieza hablando a cámara y acompaña el mensaje con ${v1} y ${v2}.`,
-    "Voz en off + imágenes":`Usa voz en off mientras muestras ${v1}, luego ${v2}.`,
-    "Demostración de producto":`Abre mostrando el producto o servicio en acción. Después enseña ${v2}.`,
-    "Problema → solución":`Primero representa el problema del cliente y después muestra ${v1} como transición hacia la solución.`,
+    "Voz en off + imágenes":`Usa voz en off mientras muestras ${v1} y después ${v2}.`,
+    "Demostración de producto":`Abre mostrando el producto o servicio en acción y después enseña ${v2}.`,
+    "Problema → solución":`Primero representa el problema y después muestra ${v1} como transición hacia la solución.`,
     "Storytelling":`Usa una secuencia de inicio, cambio y resultado con ${v1} y ${v2}.`,
-    "Testimonial":`Combina una experiencia breve del cliente con ${v1} y un cierre mostrando ${v2}.`,
+    "Testimonial":`Combina una experiencia breve con ${v1} y un cierre mostrando ${v2}.`,
     "UGC / natural":`Grábalo con estilo espontáneo, cámara cercana y escenas reales como ${v1}.`,
     "Educativo":`Apoya cada idea con texto en pantalla y ${v1}.`,
     "Lista / tips":`Usa cortes rápidos, numeración en pantalla y ${v1}.`,
     "Antes y después":`Abre con el antes, muestra brevemente el proceso y termina con ${v2}.`,
     "Promocional directo":`Muestra desde el inicio ${v1}, agrega la oferta en pantalla y cierra con el CTA.`
   };
-  return styleMap[d.style] || `Combina ${v1} y ${v2}.`;
+  return map[d.style] || `Combina ${v1} y ${v2}.`;
 }
 
-const angles = [
+const angles=[
   {
     name:"Problema → solución",
     build:(d,p,i)=>{
-      const natural=naturalOffer(d,p);
-      const priceStart=d.offerPosition==="Al inicio" ? offerLine(d,"start")+" " : "";
+      const intro=d.offerPosition==="Al inicio"?promotionSentence(d,i,"start")+" ":"";
       return {
-        hook:`¿Te pasa que ${painPhrase(d)}?`,
-        body:`${priceStart}${cap(natural)} puede ser una buena alternativa para ${lowerFirst(pick(p.benefits,i))}. ${mainBenefit(d,p,i)} ${d.offerPosition!=="Al inicio" ? offerLine(d) : ""}`,
-      }
+        hook:`¿Te gustaría ${benefit(d,p,i)}?`,
+        body:`${intro}${cap(naturalOffer(d,p))} puede ayudarte a conseguir ese cambio de una forma más clara y profesional. Además, cuentas con ${transformDifferentiator(d,p,i)}. ${d.offerPosition!=="Al inicio"?promotionSentence(d,i):""}`
+      };
     }
   },
   {
     name:"Deseo → resultado",
     build:(d,p,i)=>({
-      hook:`Si te gustaría ${lowerFirst(pick(p.benefits,i+1))}, esto te puede interesar.`,
-      body:`${cap(naturalOffer(d,p))} está pensado para ${audiencePhrase(d)}. ${mainBenefit(d,p,i+2)} ${offerLine(d)}`
+      hook:`Imagínate poder ${benefit(d,p,i+1)}.`,
+      body:`Ese es justamente uno de los objetivos de ${naturalOffer(d,p)}. La idea es acompañarte con ${transformDifferentiator(d,p,i+1)} para que la experiencia sea más confiable y el resultado se sienta más cuidado. ${promotionSentence(d,i+1)}`
     })
   },
   {
     name:"Oferta directa",
-    build:(d,p,i)=>{
-      const offer=offerLine(d,"start");
-      return {
-        hook: offer || `Tenemos una propuesta especial para quienes buscan ${lowerFirst(pick(p.benefits,i))}.`,
-        body:`${cap(naturalOffer(d,p))} combina ${lowerFirst(normalize(d.differentiator) || p.authority)} con una experiencia pensada para el cliente. ${d.offerPosition==="Al final" ? offerLine(d) : ""}`
-      }
-    }
+    build:(d,p,i)=>({
+      hook:promotionSentence(d,i,"start") || `Tenemos una propuesta especial para quienes quieren ${benefit(d,p,i)}.`,
+      body:`${cap(naturalOffer(d,p))} está pensado para ayudarte a ${benefit(d,p,i+1)}. Además, destacamos por ${transformDifferentiator(d,p,i+2)}.`
+    })
   },
   {
     name:"Objeción / duda común",
     build:(d,p,i)=>({
-      hook:`¿Todavía estás pensando si ${d.offer} realmente es para ti?`,
-      body:`Si tu principal objetivo es ${lowerFirst(pick(p.benefits,i+2))}, vale la pena mirar más allá del nombre del servicio. Lo importante es encontrar ${p.authority} y una propuesta que encaje contigo. ${offerLine(d)}`
+      hook:`Si todavía estás pensando si ${d.offer.toLowerCase()} es para ti, considera esto.`,
+      body:`No se trata solo de hacerte un servicio más. Lo importante es encontrar una opción que te ayude a ${benefit(d,p,i)} y que además te dé confianza durante el proceso. Por eso, uno de nuestros puntos fuertes es ${transformDifferentiator(d,p,i+1)}. ${promotionSentence(d,i)}`
     })
   },
   {
     name:"Curiosidad",
     build:(d,p,i)=>({
-      hook:`Hay un detalle que muchas personas pasan por alto cuando buscan ${d.offer.toLowerCase()}.`,
-      body:`No se trata solo de elegir cualquier opción. Para ${audiencePhrase(d)}, factores como ${lowerFirst(normalize(d.differentiator) || p.authority)} pueden hacer una diferencia en la experiencia. ${offerLine(d)}`
+      hook:`Hay un detalle que puede marcar la diferencia cuando buscas ${d.offer.toLowerCase()}.`,
+      body:`Más allá del precio o del nombre del servicio, conviene fijarse en cómo se trabaja el resultado y en la experiencia completa. En nuestro caso, apostamos por ${transformDifferentiator(d,p,i)}. ${promotionSentence(d,i+2)}`
     })
   },
   {
     name:"Educativo → venta",
     build:(d,p,i)=>({
-      hook:`Antes de elegir ${d.offer.toLowerCase()}, fíjate en esto.`,
-      body:`Primero, define qué resultado buscas. Segundo, revisa qué hace diferente la propuesta. Y tercero, asegúrate de que realmente responda a tu necesidad. En nuestro caso, destacamos por ${lowerFirst(normalize(d.differentiator) || p.authority)}. ${offerLine(d)}`
+      hook:`Antes de elegir ${d.offer.toLowerCase()}, fíjate en estas tres cosas.`,
+      body:`Primero, que el servicio responda realmente a lo que buscas. Segundo, que exista ${transformDifferentiator(d,p,i)}. Y tercero, que tengas claro qué resultado esperas conseguir. ${promotionSentence(d,i)}`
     })
   },
   {
     name:"Storytelling corto",
     build:(d,p,i)=>({
-      hook:`Muchas veces todo empieza con una pequeña incomodidad: ${painPhrase(d)}.`,
-      body:`Después llega la búsqueda de una mejor alternativa. Ahí es donde ${naturalOffer(d,p)} puede convertirse en una opción concreta para ${lowerFirst(pick(p.benefits,i))}. ${mainBenefit(d,p,i)} ${offerLine(d)}`
+      hook:`A veces todo empieza con algo muy simple: ${transformPain(d,p,i)}.`,
+      body:`Después llega la búsqueda de una opción que realmente ayude a cambiar esa sensación. Ahí es donde ${naturalOffer(d,p)} puede convertirse en una alternativa interesante para ${benefit(d,p,i+1)}. ${promotionSentence(d,i)}`
     })
   },
   {
     name:"Beneficio directo",
     build:(d,p,i)=>({
-      hook:`${cap(pick(p.benefits,i))} puede empezar con una decisión sencilla.`,
-      body:`${cap(naturalOffer(d,p))} te permite avanzar hacia ese objetivo con ${lowerFirst(normalize(d.differentiator) || p.authority)}. ${offerLine(d)}`
+      hook:`${cap(benefit(d,p,i))} puede empezar con una decisión sencilla.`,
+      body:`${cap(naturalOffer(d,p))} está pensado para ayudarte a avanzar hacia ese objetivo con ${transformDifferentiator(d,p,i)}. ${promotionSentence(d,i+1)}`
     })
   },
   {
@@ -905,22 +907,22 @@ const angles = [
     build:(d,p,i)=>{
       const {urgency}=promotionInfo(d);
       return {
-        hook: urgency ? `Si lo estabas pensando, toma en cuenta esto: la oportunidad está disponible ${urgency}.` : `Si lo estabas pensando, este puede ser un buen momento para decidir.`,
-        body:`${cap(naturalOffer(d,p))} está pensado para quienes quieren ${lowerFirst(pick(p.benefits,i))}. ${offerLine(d)}`
-      }
+        hook:urgency?`Si lo estabas pensando, toma en cuenta esto: la promoción está disponible ${urgency}.`:`Si lo estabas pensando, este puede ser un buen momento para decidir.`,
+        body:`${cap(naturalOffer(d,p))} puede ayudarte a ${benefit(d,p,i)} y además incluye ${transformDifferentiator(d,p,i+1)}. ${promotionSentence(d,i)}`
+      };
     }
   },
   {
     name:"Pregunta directa",
     build:(d,p,i)=>({
-      hook:`¿Qué cambiaría para ti si pudieras ${lowerFirst(pick(p.benefits,i+1))}?`,
-      body:`Esa es justamente la idea detrás de ${d.offer}. ${mainBenefit(d,p,i+1)} ${offerLine(d)}`
+      hook:`¿Qué cambiaría para ti si pudieras ${benefit(d,p,i+1)}?`,
+      body:`Esa es justamente la idea detrás de ${d.offer}. Buscamos ofrecer ${transformDifferentiator(d,p,i)} y una experiencia que te ayude a sentirte más seguro con tu decisión. ${promotionSentence(d,i)}`
     })
   }
 ];
 
 function chooseAngles(d){
-  const namesByObjective={
+  const byObjective={
     "Vender":["Oferta directa","Problema → solución","Beneficio directo","Urgencia","Objeción / duda común"],
     "Conseguir mensajes por WhatsApp":["Problema → solución","Deseo → resultado","Curiosidad","Pregunta directa","Oferta directa"],
     "Generar leads":["Curiosidad","Educativo → venta","Problema → solución","Pregunta directa","Deseo → resultado"],
@@ -930,20 +932,19 @@ function chooseAngles(d){
     "Generar reconocimiento de marca":["Storytelling corto","Curiosidad","Deseo → resultado","Educativo → venta","Pregunta directa"],
     "Educar o informar":["Educativo → venta","Curiosidad","Pregunta directa","Problema → solución","Beneficio directo"]
   };
-  const wanted=namesByObjective[d.objective] || ["Problema → solución","Deseo → resultado","Curiosidad","Beneficio directo","Oferta directa"];
-  return wanted.map(n=>angles.find(a=>a.name===n)).filter(Boolean);
+  return (byObjective[d.objective]||["Problema → solución","Deseo → resultado","Curiosidad","Beneficio directo","Oferta directa"])
+    .map(n=>angles.find(a=>a.name===n))
+    .filter(Boolean);
 }
 
 function buildScript(d,angle,idx){
   const p=profileFor(d);
   const built=angle.build(d,p,idx);
-  const hook=finalPolish(built.hook,d);
-  const body=finalPolish(built.body,d);
   return {
     title:`Guion ${idx+1}`,
     angle:angle.name,
-    hook,
-    body,
+    hook:finalPolish(built.hook,d),
+    body:finalPolish(built.body,d),
     cta:finalPolish(ctaText(d,idx),d),
     visual:visualGuide(d,p,idx),
     screen:screenText(d,angle.name),
@@ -972,7 +973,7 @@ function renderScripts(scripts,data){
       </div>
     </div>
     <div class="notice">
-      Los 5 guiones usan enfoques diferentes y toman en cuenta el cliente ideal, su necesidad, el diferencial, el tono y el objetivo del video.
+      El público objetivo se usa únicamente como contexto interno para orientar el lenguaje y el enfoque; no se inserta literalmente en los guiones.
     </div>
     ${scripts.map((s,i)=>`
       <article class="script-card">
@@ -1031,7 +1032,7 @@ window.copyScript=async function(i){
 window.regenerate=function(i){
   const available=angles.filter(a=>!currentScripts.some((s,idx)=>idx!==i && s.angle===a.name));
   const next=available[(hashText(currentData.offer)+i+Date.now())%available.length] || angles[(i+5)%angles.length];
-  currentScripts[i]=buildScript(currentData,next,i+3);
+  currentScripts[i]=buildScript(currentData,next,i+4);
   renderScripts(currentScripts,currentData);
   showToast("Nueva versión generada");
 };
@@ -1072,8 +1073,7 @@ form.addEventListener("submit",e=>{
 
   setTimeout(()=>{
     currentData=data;
-    const selected=chooseAngles(data);
-    currentScripts=selected.map((a,i)=>buildScript(data,a,i));
+    currentScripts=chooseAngles(data).map((a,i)=>buildScript(data,a,i));
     loadingState.style.display="none";
     resultContent.style.display="block";
     renderScripts(currentScripts,data);
