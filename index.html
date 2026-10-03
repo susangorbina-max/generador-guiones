@@ -488,36 +488,58 @@ const loadingState = document.getElementById('loadingState');
 const resultContent = document.getElementById('resultContent');
 const toast = document.getElementById('toast');
 
+
 const angleLibrary = [
   {
     name:"Problema → solución",
-    hook:d=>`Si ${d.industry.toLowerCase()} es parte de tu día a día, probablemente ya te encontraste con este problema: ${shorten(d.topic, 105)}.`,
-    body:d=>`La buena noticia es que no tienes que complicarlo. Con ${d.offer}, puedes abordar este problema de una manera más simple y directa. ${cleanSentence(d.must)} ${d.details ? cleanSentence(d.details) : ""}`,
-    visual:d=>`Empieza mostrando el problema en una escena real. Luego pasa a ${d.style.toLowerCase()} y enseña cómo ${d.offer} ayuda a resolverlo.`
+    build:d=>{
+      const pain = inferPain(d);
+      return {
+        hook:`¿Sientes que ${pain}?`,
+        body:`Si estás buscando mejorar tu sonrisa, ${d.offer} puede ser una alternativa para ti. ${promoSentence(d)} ${benefitSentence(d)} La idea es ayudarte a conseguir un resultado más visible sin complicar el proceso.`,
+        visual:`Empieza con un primer plano de una sonrisa o una persona frente al espejo. Luego muestra el servicio, el espacio de atención o una breve toma del procedimiento.`
+      }
+    }
   },
   {
-    name:"Curiosidad",
-    hook:d=>`Hay algo que muchas personas no saben sobre ${d.topic.toLowerCase()}... y puede cambiar la forma en que lo estás haciendo.`,
-    body:d=>`La clave está en prestar atención a lo que realmente genera resultado. ${cleanSentence(d.must)} En este caso, ${d.offer} puede ser una alternativa concreta para conseguir ${d.objective.toLowerCase()}.`,
-    visual:d=>`Abre con texto grande en pantalla y un plano cercano. Revela la idea principal en 2 o 3 cortes rápidos.`
+    name:"Oferta irresistible",
+    build:d=>{
+      return {
+        hook: offerHook(d),
+        body:`Por tiempo limitado, puedes acceder a ${d.offer} ${promoCore(d)}. ${urgencySentence(d)} Si estabas esperando una oportunidad para hacerlo, este puede ser un buen momento.`,
+        visual:`Abre con el precio o beneficio principal en pantalla. Después alterna tomas del servicio, resultados visuales y una placa final con el CTA.`
+      }
+    }
   },
   {
     name:"Beneficio directo",
-    hook:d=>`¿Quieres ${goalPhrase(d.objective)} sin hacer el proceso más complicado de lo necesario?`,
-    body:d=>`${d.offer} está pensado para ayudarte justamente con eso. ${cleanSentence(d.must)} La idea es que el beneficio se entienda rápido y que la persona sepa exactamente por qué debería interesarle.`,
-    visual:d=>`Muestra primero el resultado o beneficio principal y después explica brevemente cómo se consigue.`
+    build:d=>{
+      return {
+        hook:`Una sonrisa más luminosa puede empezar con una decisión muy simple.`,
+        body:`Con ${d.offer}, buscamos mejorar la apariencia de tu sonrisa de forma práctica y profesional. ${promoSentence(d)} ${benefitSentence(d)}`,
+        visual:`Muestra el resultado esperado desde el inicio y luego enseña brevemente cómo es la experiencia del servicio.`
+      }
+    }
   },
   {
-    name:"Storytelling",
-    hook:d=>`Todo empezó con una pregunta muy simple: ¿cómo lograr ${goalPhrase(d.objective)} de una manera más efectiva?`,
-    body:d=>`A partir de ahí, encontramos una forma más clara de trabajar ${d.topic.toLowerCase()}. Hoy, con ${d.offer}, podemos ofrecer una solución enfocada en lo que realmente necesita el cliente. ${cleanSentence(d.must)}`,
-    visual:d=>`Usa una narrativa de inicio, proceso y resultado. Puede funcionar muy bien con voz en off y escenas reales del negocio.`
+    name:"Curiosidad",
+    build:d=>{
+      return {
+        hook:`¿Sabías que no siempre necesitas un tratamiento complicado para notar un cambio en tu sonrisa?`,
+        body:`${capitalize(d.offer)} puede ayudarte a mejorar el aspecto de tus dientes y darle más luminosidad a tu sonrisa. ${promoSentence(d)} ${urgencySentence(d)}`,
+        visual:`Empieza con una pregunta en pantalla. Luego muestra una sonrisa, el consultorio y una toma rápida del servicio mientras aparecen los datos clave.`
+      }
+    }
   },
   {
     name:"Venta directa",
-    hook:d=>`Si estás buscando ${d.offer.toLowerCase()}, esto es lo que necesitas saber antes de decidir.`,
-    body:d=>`${cleanSentence(d.must)} ${d.details ? cleanSentence(d.details) : ""} Si esto es lo que estabas buscando, el siguiente paso es muy sencillo.`,
-    visual:d=>`Muestra el producto o servicio desde el primer segundo. Usa textos breves en pantalla para reforzar precio, beneficio o promoción.`
+    build:d=>{
+      return {
+        hook:`Si estabas pensando en hacerte ${articleFor(d.offer)} ${d.offer}, mira esta promoción.`,
+        body:`Tenemos ${d.offer} ${promoCore(d)}. ${urgencySentence(d)} Escríbenos para consultar disponibilidad y separar tu cita.`,
+        visual:`Empieza directamente con la oferta. Usa texto grande con el precio, una toma del servicio y cierra con WhatsApp o el canal de contacto.`
+      }
+    }
   }
 ];
 
@@ -525,13 +547,94 @@ function value(id){ return document.getElementById(id).value.trim(); }
 
 function cleanSentence(text){
   if(!text) return "";
-  text = text.trim();
+  text = text.trim().replace(/\s+/g," ");
+  text = text.charAt(0).toUpperCase() + text.slice(1);
   return /[.!?]$/.test(text) ? text : text + ".";
+}
+
+function capitalize(text){
+  if(!text) return "";
+  return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
 function shorten(text, n){
   const t = text.trim();
   return t.length <= n ? t : t.slice(0,n-1).trim() + "…";
+}
+
+function articleFor(text){
+  const t = text.toLowerCase();
+  return /^[aeiouáéíóú]/.test(t) ? "un" : "un";
+}
+
+function extractPrice(text){
+  if(!text) return "";
+  const patterns = [
+    /(?:s\/\.?\s*|s\/\s*|soles?\s*)?(\d+(?:[.,]\d{1,2})?)\s*(?:soles?)?/i,
+    /\$\s*(\d+(?:[.,]\d{1,2})?)/i
+  ];
+  for(const p of patterns){
+    const m = text.match(p);
+    if(m){
+      if(text.includes("$")) return `$${m[1]}`;
+      return `S/${m[1]}`;
+    }
+  }
+  return "";
+}
+
+function hasUrgency(text){
+  return /(semana|días|dias|hoy|limitad|hasta|solo por|únicamente|unicamente|últimos|ultimos)/i.test(text || "");
+}
+
+function promoCore(d){
+  const price = extractPrice(d.must + " " + d.details);
+  if(price) return `por ${price}`;
+  if(/promoci[oó]n/i.test(d.must)) return `con una promoción especial`;
+  return `con condiciones especiales`;
+}
+
+function promoSentence(d){
+  const price = extractPrice(d.must + " " + d.details);
+  if(price) return `Además, actualmente tenemos una promoción de ${price}.`;
+  if(d.must) return cleanSentence(d.must);
+  return "";
+}
+
+function urgencySentence(d){
+  const txt = `${d.must} ${d.details}`.trim();
+  if(/una semana/i.test(txt)) return `La promoción estará disponible solo por una semana.`;
+  if(hasUrgency(txt)) return `La promoción es por tiempo limitado.`;
+  return "";
+}
+
+function benefitSentence(d){
+  const industry = d.industry.toLowerCase();
+  if(industry.includes("dental") || d.offer.toLowerCase().includes("blanqueamiento")){
+    return `Es una opción pensada para quienes quieren mejorar el aspecto de sus dientes y conseguir una sonrisa visualmente más luminosa.`;
+  }
+  return `Está pensado para ayudarte a obtener un resultado claro, práctico y alineado con lo que buscas.`;
+}
+
+function inferPain(d){
+  const industry = d.industry.toLowerCase();
+  const offer = d.offer.toLowerCase();
+  if(industry.includes("dental") || offer.includes("blanqueamiento")){
+    return `tus dientes se ven opacos o amarillentos y te gustaría que tu sonrisa luzca más luminosa`;
+  }
+  if(industry.includes("restaurante")){
+    return `quieres atraer más clientes pero tus promociones no están generando suficiente interés`;
+  }
+  if(industry.includes("inmobili") || industry.includes("bienes raíces") || industry.includes("bienes raices")){
+    return `te cuesta encontrar una opción que realmente encaje con lo que estás buscando`;
+  }
+  return `quieres obtener un mejor resultado con ${d.offer.toLowerCase()} pero no sabes por dónde empezar`;
+}
+
+function offerHook(d){
+  const price = extractPrice(d.must + " " + d.details);
+  if(price) return `Esta semana puedes hacerte ${articleFor(d.offer)} ${d.offer} por ${price}.`;
+  return `Tenemos una promoción especial en ${d.offer} por tiempo limitado.`;
 }
 
 function goalPhrase(obj){
@@ -550,27 +653,28 @@ function goalPhrase(obj){
 
 function ctaText(cta, offer){
   const map = {
-    "Escribir por WhatsApp":`Escríbenos por WhatsApp y te contamos cómo acceder a ${offer}.`,
-    "Comprar ahora":`Compra ahora y da el siguiente paso con ${offer}.`,
-    "Visitar la web":`Visita nuestra web y conoce todos los detalles de ${offer}.`,
+    "Escribir por WhatsApp":`Escríbenos por WhatsApp y agenda tu cita.`,
+    "Comprar ahora":`Compra ahora y aprovecha esta oportunidad.`,
+    "Visitar la web":`Visita nuestra web y conoce todos los detalles.`,
     "Reservar":`Reserva ahora y asegura tu espacio.`,
     "Enviar un mensaje":`Envíanos un mensaje y te damos toda la información.`,
     "Comentar una palabra":`Comenta “INFO” y te enviamos los detalles.`,
     "Seguir la cuenta":`Síguenos para encontrar más contenido como este.`,
     "Guardar el video":`Guarda este video para tener esta información a la mano.`,
-    "Visitar el local":`Visítanos y conoce ${offer} en persona.`
+    "Visitar el local":`Visítanos y conoce más sobre ${offer}.`
   };
   return map[cta] || cta;
 }
 
 function buildScript(data, angle, idx){
+  const built = angle.build(data);
   return {
     title:`Guion ${idx+1}`,
     angle:angle.name,
-    hook:angle.hook(data),
-    body:angle.body(data),
+    hook:built.hook,
+    body:built.body.replace(/\s+/g," ").trim(),
     cta:ctaText(data.cta, data.offer),
-    visual:angle.visual(data),
+    visual:built.visual,
     duration:data.duration,
     platform:data.platform,
     style:data.style
@@ -654,20 +758,22 @@ window.copyScript = async function(i){
 }
 
 window.regenerate = function(i){
-  const s = currentScripts[i];
-  s.hook = s.hook.startsWith("¿") 
-    ? `Antes de seguir, piensa en esto: ${shorten(currentData.topic,120)}.`
-    : `¿Y si hubiera una forma más simple de ${goalPhrase(currentData.objective)}?`;
-  s.body = `${currentData.offer} puede ayudarte a trabajar este objetivo de forma más clara. ${cleanSentence(currentData.must)} ${currentData.details ? cleanSentence(currentData.details) : ""}`;
+  const alternatives = [
+    `¿Y si este fuera el momento ideal para probar ${currentData.offer}?`,
+    `Si estabas esperando una señal para mejorar este aspecto, aquí la tienes.`,
+    `Tenemos una opción pensada para quienes quieren un resultado visible y una experiencia sencilla.`
+  ];
+  currentScripts[i].hook = alternatives[i % alternatives.length];
+  currentScripts[i].body = `${capitalize(currentData.offer)} puede ser una alternativa para ayudarte a ${goalPhrase(currentData.objective)}. ${promoSentence(currentData)} ${urgencySentence(currentData)} ${benefitSentence(currentData)}`.replace(/\s+/g," ").trim();
   renderScripts(currentScripts,currentData);
   showToast("Guion regenerado");
 }
 
 window.shortenScript = function(i){
   const s = currentScripts[i];
-  s.hook = shorten(s.hook,85);
-  s.body = shorten(s.body,170);
-  s.visual = shorten(s.visual,120);
+  s.hook = shorten(s.hook,90);
+  s.body = shorten(s.body,190);
+  s.visual = shorten(s.visual,125);
   renderScripts(currentScripts,currentData);
   showToast("Versión más corta creada");
 }
