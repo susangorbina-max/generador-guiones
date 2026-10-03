@@ -177,6 +177,8 @@
     }
     .btn-primary:hover{transform:translateY(-1px)}
     .tiny{font-size:12px;color:#98A2B3;line-height:1.5;margin-top:10px;text-align:center}
+    .helper{font-size:11px;color:#98A2B3;line-height:1.45;margin-top:6px}
+    .subhead{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);margin:26px 0 14px;padding-top:18px;border-top:1px solid var(--line)}
     .results{
       padding:24px;
       min-height:520px;
@@ -323,7 +325,7 @@
     <div class="topbar-inner">
       <div class="brand">
         <div class="logo">SGC</div>
-        <div>SGC Marketing</div>
+        <div>Marketing Digital para negocios</div>
       </div>
       <div class="tag">5 ideas listas para grabar</div>
     </div>
@@ -354,6 +356,8 @@
         </div>
 
         <form id="scriptForm" class="form-wrap">
+          <div class="subhead" style="margin-top:0;padding-top:0;border-top:0">Sobre tu negocio</div>
+
           <div class="field">
             <label for="industry">¿A qué se dedica tu negocio?</label>
             <input id="industry" required placeholder="Ej. Clínica dental, restaurante, inmobiliaria..." />
@@ -363,6 +367,24 @@
             <label for="offer">¿Qué producto, servicio u oferta quieres promocionar?</label>
             <input id="offer" required placeholder="Ej. Blanqueamiento dental, menú ejecutivo..." />
           </div>
+
+          <div class="field">
+            <label for="audience">¿A quién quieres llegar?</label>
+            <textarea id="audience" required placeholder="Ej. Mujeres y hombres de 25 a 45 años que quieren mejorar su sonrisa"></textarea>
+            <div class="helper">Describe brevemente a tu cliente ideal.</div>
+          </div>
+
+          <div class="field">
+            <label for="pain">¿Qué problema, necesidad o deseo tiene ese cliente?</label>
+            <textarea id="pain" required placeholder="Ej. Siente que sus dientes se ven amarillentos y quiere sonreír con más confianza"></textarea>
+          </div>
+
+          <div class="field">
+            <label for="differentiator">¿Qué hace diferente o atractivo a tu producto/servicio?</label>
+            <textarea id="differentiator" required placeholder="Ej. Atención profesional, resultados visibles, cita rápida, precio promocional..."></textarea>
+          </div>
+
+          <div class="subhead">Sobre el video</div>
 
           <div class="field">
             <label for="objective">¿Qué quieres lograr con este video?</label>
@@ -381,17 +403,22 @@
 
           <div class="field">
             <label for="topic">¿De qué quieres que trate el video?</label>
-            <textarea id="topic" required placeholder="Describe la idea principal del video..."></textarea>
+            <textarea id="topic" required placeholder="Ej. Promocionar el blanqueamiento dental durante esta semana"></textarea>
           </div>
 
           <div class="field">
             <label for="must">¿Qué información sí o sí quieres mencionar?</label>
-            <textarea id="must" required placeholder="Precio, beneficios, promoción, ubicación, diferenciadores..."></textarea>
+            <textarea id="must" required placeholder="Ej. Precio S/100, válido por una semana, ubicación, beneficios..."></textarea>
           </div>
 
           <div class="field">
             <label for="details">Detalles adicionales <span class="optional">(opcional)</span></label>
             <textarea id="details" placeholder="Cualquier contexto que ayude a mejorar el guion..."></textarea>
+          </div>
+
+          <div class="field">
+            <label for="avoid">¿Hay algo que NO quieres que se mencione? <span class="optional">(opcional)</span></label>
+            <textarea id="avoid" placeholder="Ej. No prometer resultados garantizados, no mencionar descuentos..."></textarea>
           </div>
 
           <div class="row">
@@ -418,20 +445,44 @@
             </div>
           </div>
 
+          <div class="row">
+            <div class="field">
+              <label for="style">Formato / estilo</label>
+              <select id="style" required>
+                <option>Hablando a cámara</option>
+                <option>Voz en off + imágenes</option>
+                <option>Demostración de producto</option>
+                <option>Problema → solución</option>
+                <option>Storytelling</option>
+                <option>Testimonial</option>
+                <option>UGC / natural</option>
+                <option>Educativo</option>
+                <option>Lista / tips</option>
+                <option>Antes y después</option>
+                <option>Promocional directo</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="tone">Tono del guion</label>
+              <select id="tone" required>
+                <option>Cercano y natural</option>
+                <option>Profesional</option>
+                <option>Persuasivo</option>
+                <option>Educativo</option>
+                <option>Directo y vendedor</option>
+                <option>Emocional</option>
+              </select>
+            </div>
+          </div>
+
           <div class="field">
-            <label for="style">Formato / estilo del video</label>
-            <select id="style" required>
-              <option>Hablando a cámara</option>
-              <option>Voz en off + imágenes</option>
-              <option>Demostración de producto</option>
-              <option>Problema → solución</option>
-              <option>Storytelling</option>
-              <option>Testimonial</option>
-              <option>UGC / natural</option>
-              <option>Educativo</option>
-              <option>Lista / tips</option>
-              <option>Antes y después</option>
-              <option>Promocional directo</option>
+            <label for="offerPosition">¿Dónde quieres mencionar la oferta/precio?</label>
+            <select id="offerPosition" required>
+              <option>Donde quede más natural</option>
+              <option>Al inicio</option>
+              <option>En el desarrollo</option>
+              <option>Al final</option>
+              <option>No mencionar precio</option>
             </select>
           </div>
 
@@ -451,7 +502,7 @@
           </div>
 
           <button class="btn btn-primary" type="submit">✨ Crear mis 5 guiones</button>
-          <div class="tiny">Esta versión funciona como prototipo. Puede conectarse luego a una API de IA real.</div>
+          <div class="tiny">Versión 2 · Generación local mejorada con contexto, rubro, cliente ideal, tono y diferentes ángulos creativos.</div>
         </form>
       </div>
 
@@ -488,219 +539,440 @@ const loadingState = document.getElementById('loadingState');
 const resultContent = document.getElementById('resultContent');
 const toast = document.getElementById('toast');
 
-
-const angleLibrary = [
-  {
-    name:"Problema → solución",
-    build:d=>{
-      const pain = inferPain(d);
-      return {
-        hook:`¿Sientes que ${pain}?`,
-        body:`Si estás buscando mejorar tu sonrisa, ${d.offer} puede ser una alternativa para ti. ${promoSentence(d)} ${benefitSentence(d)} La idea es ayudarte a conseguir un resultado más visible sin complicar el proceso.`,
-        visual:`Empieza con un primer plano de una sonrisa o una persona frente al espejo. Luego muestra el servicio, el espacio de atención o una breve toma del procedimiento.`
-      }
-    }
-  },
-  {
-    name:"Oferta irresistible",
-    build:d=>{
-      return {
-        hook: offerHook(d),
-        body:`Por tiempo limitado, puedes acceder a ${d.offer} ${promoCore(d)}. ${urgencySentence(d)} Si estabas esperando una oportunidad para hacerlo, este puede ser un buen momento.`,
-        visual:`Abre con el precio o beneficio principal en pantalla. Después alterna tomas del servicio, resultados visuales y una placa final con el CTA.`
-      }
-    }
-  },
-  {
-    name:"Beneficio directo",
-    build:d=>{
-      return {
-        hook:`Una sonrisa más luminosa puede empezar con una decisión muy simple.`,
-        body:`Con ${d.offer}, buscamos mejorar la apariencia de tu sonrisa de forma práctica y profesional. ${promoSentence(d)} ${benefitSentence(d)}`,
-        visual:`Muestra el resultado esperado desde el inicio y luego enseña brevemente cómo es la experiencia del servicio.`
-      }
-    }
-  },
-  {
-    name:"Curiosidad",
-    build:d=>{
-      return {
-        hook:`¿Sabías que no siempre necesitas un tratamiento complicado para notar un cambio en tu sonrisa?`,
-        body:`${capitalize(d.offer)} puede ayudarte a mejorar el aspecto de tus dientes y darle más luminosidad a tu sonrisa. ${promoSentence(d)} ${urgencySentence(d)}`,
-        visual:`Empieza con una pregunta en pantalla. Luego muestra una sonrisa, el consultorio y una toma rápida del servicio mientras aparecen los datos clave.`
-      }
-    }
-  },
-  {
-    name:"Venta directa",
-    build:d=>{
-      return {
-        hook:`Si estabas pensando en hacerte ${articleFor(d.offer)} ${d.offer}, mira esta promoción.`,
-        body:`Tenemos ${d.offer} ${promoCore(d)}. ${urgencySentence(d)} Escríbenos para consultar disponibilidad y separar tu cita.`,
-        visual:`Empieza directamente con la oferta. Usa texto grande con el precio, una toma del servicio y cierra con WhatsApp o el canal de contacto.`
-      }
-    }
-  }
-];
-
 function value(id){ return document.getElementById(id).value.trim(); }
-
-function cleanSentence(text){
-  if(!text) return "";
-  text = text.trim().replace(/\s+/g," ");
-  text = text.charAt(0).toUpperCase() + text.slice(1);
-  return /[.!?]$/.test(text) ? text : text + ".";
+function cap(s){ return s ? s.charAt(0).toUpperCase() + s.slice(1) : ""; }
+function normalize(s){ return (s || "").trim().replace(/\s+/g," "); }
+function sentence(s){
+  s = normalize(s);
+  if(!s) return "";
+  s = cap(s);
+  return /[.!?]$/.test(s) ? s : s + ".";
 }
-
-function capitalize(text){
-  if(!text) return "";
-  return text.charAt(0).toUpperCase() + text.slice(1);
+function lowerFirst(s){ return s ? s.charAt(0).toLowerCase() + s.slice(1) : ""; }
+function shorten(s,n){ s=normalize(s); return s.length<=n?s:s.slice(0,n-1).trim()+"…"; }
+function pick(arr, seed=0){ return arr[Math.abs(seed)%arr.length]; }
+function hashText(s){
+  let h=0;
+  for(let i=0;i<s.length;i++) h=((h<<5)-h)+s.charCodeAt(i)|0;
+  return Math.abs(h);
 }
-
-function shorten(text, n){
-  const t = text.trim();
-  return t.length <= n ? t : t.slice(0,n-1).trim() + "…";
-}
-
-function articleFor(text){
-  const t = text.toLowerCase();
-  return /^[aeiouáéíóú]/.test(t) ? "un" : "un";
+function escapeHtml(str){
+  return String(str || "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
 }
 
 function extractPrice(text){
-  if(!text) return "";
-  const patterns = [
-    /(?:s\/\.?\s*|s\/\s*|soles?\s*)?(\d+(?:[.,]\d{1,2})?)\s*(?:soles?)?/i,
-    /\$\s*(\d+(?:[.,]\d{1,2})?)/i
-  ];
-  for(const p of patterns){
-    const m = text.match(p);
-    if(m){
-      if(text.includes("$")) return `$${m[1]}`;
-      return `S/${m[1]}`;
+  text = text || "";
+  let m = text.match(/(?:S\/\.?\s*|S\/\s*)(\d+(?:[.,]\d{1,2})?)/i);
+  if(m) return `S/${m[1]}`;
+  m = text.match(/\$\s*(\d+(?:[.,]\d{1,2})?)/i);
+  if(m) return `$${m[1]}`;
+  m = text.match(/(\d+(?:[.,]\d{1,2})?)\s*soles?/i);
+  if(m) return `S/${m[1]}`;
+  return "";
+}
+function extractUrgency(text){
+  const t=(text||"").toLowerCase();
+  const week=t.match(/(?:solo\s+)?(?:por\s+)?(\d+|una)\s+semanas?/i);
+  if(week) return week[1]==="una" ? "solo por una semana" : `solo por ${week[1]} semanas`;
+  const days=t.match(/(?:solo\s+)?(?:por\s+)?(\d+)\s+d[ií]as?/i);
+  if(days) return `solo por ${days[1]} días`;
+  if(/hasta\s+(?:el\s+)?[^,.]+/i.test(text||"")) {
+    const m=(text||"").match(/hasta\s+(?:el\s+)?([^,.]+)/i);
+    if(m) return `hasta ${m[1].trim()}`;
+  }
+  if(/tiempo limitado|promoci[oó]n limitada|cupos limitados/i.test(t)) return "por tiempo limitado";
+  return "";
+}
+
+const profiles = {
+  dental:{
+    test:/dental|odont|dentista|blanqueamiento|ortodoncia|implante|carilla/i,
+    noun:"tratamiento",
+    benefits:["mejorar el aspecto de tu sonrisa","sentirte más cómodo al sonreír","conseguir una sonrisa visualmente más luminosa"],
+    visuals:["primer plano de una sonrisa","toma del consultorio","detalle del procedimiento","resultado final con una sonrisa natural"],
+    authority:"atención profesional",
+    verbs:["mejorar","cuidar","renovar"]
+  },
+  restaurant:{
+    test:/restaurante|comida|cevicher|poller|cafeter|pizzer|sushi|men[uú]|postre|hamburg/i,
+    noun:"opción",
+    benefits:["disfrutar algo rico sin complicarte","probar una opción que realmente provoque","convertir una comida normal en un momento especial"],
+    visuals:["primer plano del plato","preparación en cocina","producto servido","cliente disfrutando el plato"],
+    authority:"buena preparación y una experiencia cuidada",
+    verbs:["disfrutar","probar","descubrir"]
+  },
+  beauty:{
+    test:/est[eé]tica|sal[oó]n|spa|cabello|uñas|manicure|facial|depil|maquill|belleza/i,
+    noun:"servicio",
+    benefits:["verte y sentirte mejor","resaltar tu imagen de una forma natural","conseguir un cambio visible sin perder tu estilo"],
+    visuals:["antes del servicio","detalle del proceso","resultado final","reacción de la clienta o cliente"],
+    authority:"atención personalizada",
+    verbs:["renovar","resaltar","mejorar"]
+  },
+  realestate:{
+    test:/inmobili|departamento|casa|terreno|propiedad|lote|alquiler|venta de inmueble/i,
+    noun:"oportunidad",
+    benefits:["encontrar una opción que encaje con lo que buscas","tomar una decisión con información más clara","acercarte a una propiedad que sí tenga sentido para ti"],
+    visuals:["fachada o vista principal","recorrido por ambientes","detalle de ubicación","datos clave en pantalla"],
+    authority:"información clara y acompañamiento",
+    verbs:["encontrar","evaluar","invertir"]
+  },
+  education:{
+    test:/curso|taller|academia|escuela|capacit|clase|mentor|formaci[oó]n/i,
+    noun:"programa",
+    benefits:["aprender de forma práctica","aplicar lo aprendido desde el primer día","avanzar con una ruta más clara"],
+    visuals:["docente explicando","pantalla o material de clase","alumnos trabajando","resultado o proyecto final"],
+    authority:"metodología práctica",
+    verbs:["aprender","aplicar","avanzar"]
+  },
+  fitness:{
+    test:/gym|gimnasio|fitness|entrenamiento|nutrici[oó]n|personal trainer|ejercicio/i,
+    noun:"programa",
+    benefits:["avanzar hacia tu objetivo con mayor estructura","entrenar con una ruta más clara","convertir la constancia en progreso"],
+    visuals:["persona entrenando","detalle de ejercicio","acompañamiento del entrenador","progreso o energía al finalizar"],
+    authority:"acompañamiento profesional",
+    verbs:["entrenar","avanzar","mejorar"]
+  },
+  pets:{
+    test:/veterin|mascota|perro|gato|pet shop|peluquer[ií]a canina/i,
+    noun:"servicio",
+    benefits:["cuidar mejor a tu mascota","darle una atención más cómoda y segura","mantener su bienestar con una atención adecuada"],
+    visuals:["mascota antes del servicio","atención o cuidado","detalle del proceso","mascota tranquila al finalizar"],
+    authority:"cuidado responsable",
+    verbs:["cuidar","proteger","atender"]
+  },
+  generic:{
+    test:/.*/,
+    noun:"solución",
+    benefits:["obtener un resultado más claro","resolver una necesidad concreta","dar el siguiente paso con mayor seguridad"],
+    visuals:["situación inicial","producto o servicio en uso","detalle del proceso","resultado final"],
+    authority:"una propuesta pensada para el cliente",
+    verbs:["mejorar","resolver","avanzar"]
+  }
+};
+
+function profileFor(d){
+  const text=[d.industry,d.offer,d.topic].join(" ");
+  return Object.values(profiles).find(p=>p!==profiles.generic && p.test.test(text)) || profiles.generic;
+}
+
+function naturalOffer(d, p){
+  const offer=normalize(d.offer);
+  const low=offer.toLowerCase();
+  if(/^un |^una |^el |^la |^los |^las /.test(low)) return offer;
+  const feminine=/ción$|dad$|tad$|tud$|umbre$|sis$|itis$|ie$/.test(low);
+  if(/servicio|tratamiento|curso|taller|programa|plan|menú|menu|blanqueamiento|implante|departamento|producto/i.test(low)){
+    if(/blanqueamiento|tratamiento|curso|taller|programa|plan|menú|menu|implante|departamento|producto/i.test(low)) return `un buen ${offer}`;
+  }
+  if(/asesor[ií]a|consulta|promoci[oó]n|limpieza|sesión|sesion|clase|evaluaci[oó]n/i.test(low)) return `una buena ${offer}`;
+  return `${p.noun==="oportunidad" ? "esta" : feminine ? "una" : "un buen"} ${offer}`;
+}
+
+function cleanedMust(d){
+  let t=normalize(d.must);
+  if(!t) return "";
+  // Remove conversational filler that shouldn't be copied verbatim
+  t=t.replace(/^(que\s+)?(tenemos|tengo|contamos con)\s+/i,"");
+  t=t.replace(/^(que\s+)?/i,"");
+  return t;
+}
+
+function promotionInfo(d){
+  const text=[d.must,d.details].join(" ");
+  const price=extractPrice(text);
+  const urgency=extractUrgency(text);
+  return {price, urgency};
+}
+
+function offerLine(d, where="mid"){
+  if(d.offerPosition==="No mencionar precio") return "";
+  const {price,urgency}=promotionInfo(d);
+  if(!price && !/promoci[oó]n|oferta|descuento/i.test(d.must+" "+d.details)) return "";
+  const time=urgency ? ` ${urgency}` : "";
+  if(price) {
+    if(where==="start") return `Ahora puedes acceder a ${d.offer} por ${price}${time}.`;
+    return `Además, ${d.offer} está disponible por ${price}${time}.`;
+  }
+  return urgency ? `Además, tenemos una condición especial ${urgency}.` : `Además, tenemos una condición especial disponible.`;
+}
+
+function mainBenefit(d,p,idx=0){
+  const explicit=normalize(d.differentiator);
+  const profileBenefit=pick(p.benefits, hashText(d.offer)+idx);
+  if(explicit && explicit.length < 105){
+    const cleaned=explicit.replace(/^(tenemos|ofrecemos|contamos con)\s+/i,"");
+    return `${cap(profileBenefit)} y hacerlo con ${lowerFirst(cleaned)}.`;
+  }
+  return `${cap(profileBenefit)}.`;
+}
+
+function audiencePhrase(d){
+  const a=normalize(d.audience);
+  if(!a) return "personas que buscan una mejor opción";
+  return a.replace(/^(mujeres y hombres|personas|clientes)\s+/i, m=>m.toLowerCase());
+}
+
+function painPhrase(d){
+  let p=normalize(d.pain);
+  if(!p) return "sientes que todavía no consigues el resultado que buscas";
+  p=p.replace(/^(siente que|sienten que|quiere|quieren)\s+/i,"");
+  return lowerFirst(p);
+}
+
+function toneAdjust(text,d){
+  text=normalize(text);
+  if(d.tone==="Profesional"){
+    return text.replace(/mira esta promoción/gi,"conoce esta propuesta").replace(/te contamos/gi,"te brindamos la información");
+  }
+  if(d.tone==="Directo y vendedor"){
+    return text.replace(/puede ayudarte a/gi,"te ayuda a").replace(/podría/gi,"puede");
+  }
+  if(d.tone==="Cercano y natural"){
+    return text.replace(/acceder a/gi,"probar").replace(/obtener/gi,"conseguir");
+  }
+  return text;
+}
+
+function avoidFilter(text,d){
+  const avoid=normalize(d.avoid).toLowerCase();
+  if(!avoid) return text;
+  if(/garantiz|garantía|garantia/.test(avoid)){
+    text=text.replace(/\bgarantizad[oa]s?\b/gi,"esperado").replace(/\bgarantía\b/gi,"respaldo");
+  }
+  if(/descuento/.test(avoid)){
+    text=text.replace(/\bdescuento\b/gi,"condición especial");
+  }
+  return text;
+}
+
+function finalPolish(text,d){
+  text=normalize(text)
+    .replace(/\s+([,.!?])/g,"$1")
+    .replace(/\.\s*\./g,".")
+    .replace(/,\s*,/g,",")
+    .replace(/\bcon con\b/gi,"con")
+    .replace(/\bun buen una\b/gi,"una buena")
+    .replace(/\buna buen\b/gi,"una buena");
+  text=toneAdjust(text,d);
+  text=avoidFilter(text,d);
+  return text;
+}
+
+function ctaText(d, idx=0){
+  const variants={
+    "Escribir por WhatsApp":[
+      "Escríbenos por WhatsApp y te enviamos todos los detalles.",
+      "¿Quieres más información? Escríbenos por WhatsApp y conversemos.",
+      "Envíanos un mensaje por WhatsApp y consulta disponibilidad."
+    ],
+    "Comprar ahora":[
+      "Compra ahora y aprovecha esta oportunidad.",
+      "Haz tu compra hoy y da el siguiente paso.",
+      "Si esto es para ti, compra ahora."
+    ],
+    "Visitar la web":[
+      "Visita nuestra web y revisa todos los detalles.",
+      "Encuentra toda la información en nuestra web.",
+      "Entra a nuestra web y conoce la propuesta completa."
+    ],
+    "Reservar":[
+      "Reserva ahora y asegura tu espacio.",
+      "Agenda tu reserva y consulta los horarios disponibles.",
+      "Reserva hoy y separa tu espacio."
+    ],
+    "Enviar un mensaje":[
+      "Envíanos un mensaje y te damos toda la información.",
+      "Escríbenos y resolvemos tus dudas.",
+      "Mándanos un mensaje para conocer los detalles."
+    ],
+    "Comentar una palabra":[
+      "Comenta “INFO” y te enviamos los detalles.",
+      "Escribe “INFO” en los comentarios y te contamos cómo funciona.",
+      "Comenta “QUIERO” y te mandamos la información."
+    ],
+    "Seguir la cuenta":[
+      "Síguenos para encontrar más contenido como este.",
+      "Síguenos y descubre más consejos y novedades.",
+      "Si te sirvió, síguenos para ver más."
+    ],
+    "Guardar el video":[
+      "Guarda este video para tener esta información a la mano.",
+      "Guárdalo para revisarlo cuando lo necesites.",
+      "Si te sirve, guarda este video."
+    ],
+    "Visitar el local":[
+      "Visítanos y conoce la experiencia en persona.",
+      "Ven a nuestro local y te contamos todos los detalles.",
+      "Te esperamos en nuestro local."
+    ]
+  };
+  return pick(variants[d.cta] || [d.cta], idx + hashText(d.offer));
+}
+
+function screenText(d, angle){
+  const {price,urgency}=promotionInfo(d);
+  const items=[angle, cap(d.offer)];
+  if(price && d.offerPosition!=="No mencionar precio") items.push(price);
+  if(urgency) items.push(cap(urgency));
+  return items.slice(0,4).join(" · ");
+}
+
+function visualGuide(d,p,idx){
+  const v1=pick(p.visuals,idx);
+  const v2=pick(p.visuals,idx+1);
+  const styleMap={
+    "Hablando a cámara":`Empieza hablando a cámara y acompaña el mensaje con ${v1} y ${v2}.`,
+    "Voz en off + imágenes":`Usa voz en off mientras muestras ${v1}, luego ${v2}.`,
+    "Demostración de producto":`Abre mostrando el producto o servicio en acción. Después enseña ${v2}.`,
+    "Problema → solución":`Primero representa el problema del cliente y después muestra ${v1} como transición hacia la solución.`,
+    "Storytelling":`Usa una secuencia de inicio, cambio y resultado con ${v1} y ${v2}.`,
+    "Testimonial":`Combina una experiencia breve del cliente con ${v1} y un cierre mostrando ${v2}.`,
+    "UGC / natural":`Grábalo con estilo espontáneo, cámara cercana y escenas reales como ${v1}.`,
+    "Educativo":`Apoya cada idea con texto en pantalla y ${v1}.`,
+    "Lista / tips":`Usa cortes rápidos, numeración en pantalla y ${v1}.`,
+    "Antes y después":`Abre con el antes, muestra brevemente el proceso y termina con ${v2}.`,
+    "Promocional directo":`Muestra desde el inicio ${v1}, agrega la oferta en pantalla y cierra con el CTA.`
+  };
+  return styleMap[d.style] || `Combina ${v1} y ${v2}.`;
+}
+
+const angles = [
+  {
+    name:"Problema → solución",
+    build:(d,p,i)=>{
+      const natural=naturalOffer(d,p);
+      const priceStart=d.offerPosition==="Al inicio" ? offerLine(d,"start")+" " : "";
+      return {
+        hook:`¿Te pasa que ${painPhrase(d)}?`,
+        body:`${priceStart}${cap(natural)} puede ser una buena alternativa para ${lowerFirst(pick(p.benefits,i))}. ${mainBenefit(d,p,i)} ${d.offerPosition!=="Al inicio" ? offerLine(d) : ""}`,
+      }
     }
+  },
+  {
+    name:"Deseo → resultado",
+    build:(d,p,i)=>({
+      hook:`Si te gustaría ${lowerFirst(pick(p.benefits,i+1))}, esto te puede interesar.`,
+      body:`${cap(naturalOffer(d,p))} está pensado para ${audiencePhrase(d)}. ${mainBenefit(d,p,i+2)} ${offerLine(d)}`
+    })
+  },
+  {
+    name:"Oferta directa",
+    build:(d,p,i)=>{
+      const offer=offerLine(d,"start");
+      return {
+        hook: offer || `Tenemos una propuesta especial para quienes buscan ${lowerFirst(pick(p.benefits,i))}.`,
+        body:`${cap(naturalOffer(d,p))} combina ${lowerFirst(normalize(d.differentiator) || p.authority)} con una experiencia pensada para el cliente. ${d.offerPosition==="Al final" ? offerLine(d) : ""}`
+      }
+    }
+  },
+  {
+    name:"Objeción / duda común",
+    build:(d,p,i)=>({
+      hook:`¿Todavía estás pensando si ${d.offer} realmente es para ti?`,
+      body:`Si tu principal objetivo es ${lowerFirst(pick(p.benefits,i+2))}, vale la pena mirar más allá del nombre del servicio. Lo importante es encontrar ${p.authority} y una propuesta que encaje contigo. ${offerLine(d)}`
+    })
+  },
+  {
+    name:"Curiosidad",
+    build:(d,p,i)=>({
+      hook:`Hay un detalle que muchas personas pasan por alto cuando buscan ${d.offer.toLowerCase()}.`,
+      body:`No se trata solo de elegir cualquier opción. Para ${audiencePhrase(d)}, factores como ${lowerFirst(normalize(d.differentiator) || p.authority)} pueden hacer una diferencia en la experiencia. ${offerLine(d)}`
+    })
+  },
+  {
+    name:"Educativo → venta",
+    build:(d,p,i)=>({
+      hook:`Antes de elegir ${d.offer.toLowerCase()}, fíjate en esto.`,
+      body:`Primero, define qué resultado buscas. Segundo, revisa qué hace diferente la propuesta. Y tercero, asegúrate de que realmente responda a tu necesidad. En nuestro caso, destacamos por ${lowerFirst(normalize(d.differentiator) || p.authority)}. ${offerLine(d)}`
+    })
+  },
+  {
+    name:"Storytelling corto",
+    build:(d,p,i)=>({
+      hook:`Muchas veces todo empieza con una pequeña incomodidad: ${painPhrase(d)}.`,
+      body:`Después llega la búsqueda de una mejor alternativa. Ahí es donde ${naturalOffer(d,p)} puede convertirse en una opción concreta para ${lowerFirst(pick(p.benefits,i))}. ${mainBenefit(d,p,i)} ${offerLine(d)}`
+    })
+  },
+  {
+    name:"Beneficio directo",
+    build:(d,p,i)=>({
+      hook:`${cap(pick(p.benefits,i))} puede empezar con una decisión sencilla.`,
+      body:`${cap(naturalOffer(d,p))} te permite avanzar hacia ese objetivo con ${lowerFirst(normalize(d.differentiator) || p.authority)}. ${offerLine(d)}`
+    })
+  },
+  {
+    name:"Urgencia",
+    build:(d,p,i)=>{
+      const {urgency}=promotionInfo(d);
+      return {
+        hook: urgency ? `Si lo estabas pensando, toma en cuenta esto: la oportunidad está disponible ${urgency}.` : `Si lo estabas pensando, este puede ser un buen momento para decidir.`,
+        body:`${cap(naturalOffer(d,p))} está pensado para quienes quieren ${lowerFirst(pick(p.benefits,i))}. ${offerLine(d)}`
+      }
+    }
+  },
+  {
+    name:"Pregunta directa",
+    build:(d,p,i)=>({
+      hook:`¿Qué cambiaría para ti si pudieras ${lowerFirst(pick(p.benefits,i+1))}?`,
+      body:`Esa es justamente la idea detrás de ${d.offer}. ${mainBenefit(d,p,i+1)} ${offerLine(d)}`
+    })
   }
-  return "";
-}
+];
 
-function hasUrgency(text){
-  return /(semana|días|dias|hoy|limitad|hasta|solo por|únicamente|unicamente|últimos|ultimos)/i.test(text || "");
-}
-
-function promoCore(d){
-  const price = extractPrice(d.must + " " + d.details);
-  if(price) return `por ${price}`;
-  if(/promoci[oó]n/i.test(d.must)) return `con una promoción especial`;
-  return `con condiciones especiales`;
-}
-
-function promoSentence(d){
-  const price = extractPrice(d.must + " " + d.details);
-  if(price) return `Además, actualmente tenemos una promoción de ${price}.`;
-  if(d.must) return cleanSentence(d.must);
-  return "";
-}
-
-function urgencySentence(d){
-  const txt = `${d.must} ${d.details}`.trim();
-  if(/una semana/i.test(txt)) return `La promoción estará disponible solo por una semana.`;
-  if(hasUrgency(txt)) return `La promoción es por tiempo limitado.`;
-  return "";
-}
-
-function benefitSentence(d){
-  const industry = d.industry.toLowerCase();
-  if(industry.includes("dental") || d.offer.toLowerCase().includes("blanqueamiento")){
-    return `Es una opción pensada para quienes quieren mejorar el aspecto de sus dientes y conseguir una sonrisa visualmente más luminosa.`;
-  }
-  return `Está pensado para ayudarte a obtener un resultado claro, práctico y alineado con lo que buscas.`;
-}
-
-function inferPain(d){
-  const industry = d.industry.toLowerCase();
-  const offer = d.offer.toLowerCase();
-  if(industry.includes("dental") || offer.includes("blanqueamiento")){
-    return `tus dientes se ven opacos o amarillentos y te gustaría que tu sonrisa luzca más luminosa`;
-  }
-  if(industry.includes("restaurante")){
-    return `quieres atraer más clientes pero tus promociones no están generando suficiente interés`;
-  }
-  if(industry.includes("inmobili") || industry.includes("bienes raíces") || industry.includes("bienes raices")){
-    return `te cuesta encontrar una opción que realmente encaje con lo que estás buscando`;
-  }
-  return `quieres obtener un mejor resultado con ${d.offer.toLowerCase()} pero no sabes por dónde empezar`;
-}
-
-function offerHook(d){
-  const price = extractPrice(d.must + " " + d.details);
-  if(price) return `Esta semana puedes hacerte ${articleFor(d.offer)} ${d.offer} por ${price}.`;
-  return `Tenemos una promoción especial en ${d.offer} por tiempo limitado.`;
-}
-
-function goalPhrase(obj){
-  const map = {
-    "Vender":"generar más ventas",
-    "Conseguir mensajes por WhatsApp":"recibir más consultas por WhatsApp",
-    "Generar leads":"conseguir nuevos contactos interesados",
-    "Conseguir reservas":"conseguir más reservas",
-    "Aumentar visitas al negocio":"llevar más personas a tu negocio",
-    "Presentar un producto o servicio":"presentar mejor tu oferta",
-    "Generar reconocimiento de marca":"hacer que más personas recuerden tu marca",
-    "Educar o informar":"explicar este tema de forma clara"
+function chooseAngles(d){
+  const namesByObjective={
+    "Vender":["Oferta directa","Problema → solución","Beneficio directo","Urgencia","Objeción / duda común"],
+    "Conseguir mensajes por WhatsApp":["Problema → solución","Deseo → resultado","Curiosidad","Pregunta directa","Oferta directa"],
+    "Generar leads":["Curiosidad","Educativo → venta","Problema → solución","Pregunta directa","Deseo → resultado"],
+    "Conseguir reservas":["Oferta directa","Urgencia","Deseo → resultado","Problema → solución","Beneficio directo"],
+    "Aumentar visitas al negocio":["Deseo → resultado","Curiosidad","Oferta directa","Storytelling corto","Problema → solución"],
+    "Presentar un producto o servicio":["Beneficio directo","Educativo → venta","Curiosidad","Problema → solución","Storytelling corto"],
+    "Generar reconocimiento de marca":["Storytelling corto","Curiosidad","Deseo → resultado","Educativo → venta","Pregunta directa"],
+    "Educar o informar":["Educativo → venta","Curiosidad","Pregunta directa","Problema → solución","Beneficio directo"]
   };
-  return map[obj] || obj.toLowerCase();
+  const wanted=namesByObjective[d.objective] || ["Problema → solución","Deseo → resultado","Curiosidad","Beneficio directo","Oferta directa"];
+  return wanted.map(n=>angles.find(a=>a.name===n)).filter(Boolean);
 }
 
-function ctaText(cta, offer){
-  const map = {
-    "Escribir por WhatsApp":`Escríbenos por WhatsApp y agenda tu cita.`,
-    "Comprar ahora":`Compra ahora y aprovecha esta oportunidad.`,
-    "Visitar la web":`Visita nuestra web y conoce todos los detalles.`,
-    "Reservar":`Reserva ahora y asegura tu espacio.`,
-    "Enviar un mensaje":`Envíanos un mensaje y te damos toda la información.`,
-    "Comentar una palabra":`Comenta “INFO” y te enviamos los detalles.`,
-    "Seguir la cuenta":`Síguenos para encontrar más contenido como este.`,
-    "Guardar el video":`Guarda este video para tener esta información a la mano.`,
-    "Visitar el local":`Visítanos y conoce más sobre ${offer}.`
-  };
-  return map[cta] || cta;
-}
-
-function buildScript(data, angle, idx){
-  const built = angle.build(data);
+function buildScript(d,angle,idx){
+  const p=profileFor(d);
+  const built=angle.build(d,p,idx);
+  const hook=finalPolish(built.hook,d);
+  const body=finalPolish(built.body,d);
   return {
     title:`Guion ${idx+1}`,
     angle:angle.name,
-    hook:built.hook,
-    body:built.body.replace(/\s+/g," ").trim(),
-    cta:ctaText(data.cta, data.offer),
-    visual:built.visual,
-    duration:data.duration,
-    platform:data.platform,
-    style:data.style
-  }
+    hook,
+    body,
+    cta:finalPolish(ctaText(d,idx),d),
+    visual:visualGuide(d,p,idx),
+    screen:screenText(d,angle.name),
+    duration:d.duration,
+    platform:d.platform,
+    style:d.style
+  };
 }
 
 function scriptToText(s){
-  return `${s.title} — ${s.angle}\n\nHOOK\n${s.hook}\n\nDESARROLLO\n${s.body}\n\nCTA\n${s.cta}\n\nRECOMENDACIÓN VISUAL\n${s.visual}\n\nDuración: ${s.duration}\nPlataforma: ${s.platform}\nEstilo: ${s.style}`;
+  return `${s.title} — ${s.angle}\n\nHOOK\n${s.hook}\n\nGUION\n${s.body}\n\nCTA\n${s.cta}\n\nTEXTO EN PANTALLA\n${s.screen}\n\nRECOMENDACIÓN VISUAL\n${s.visual}\n\nDuración: ${s.duration}\nPlataforma: ${s.platform}\nEstilo: ${s.style}`;
 }
 
 function showToast(msg){
-  toast.textContent = msg;
-  toast.classList.add('show');
-  setTimeout(()=>toast.classList.remove('show'),1800);
+  toast.textContent=msg;
+  toast.classList.add("show");
+  setTimeout(()=>toast.classList.remove("show"),1800);
 }
 
-function renderScripts(scripts, data){
-  resultContent.innerHTML = `
+function renderScripts(scripts,data){
+  resultContent.innerHTML=`
     <div class="results-top">
       <div>
         <h2>5 guiones para ${escapeHtml(data.offer)}</h2>
-        <span>${escapeHtml(data.industry)} · ${escapeHtml(data.platform)} · ${escapeHtml(data.duration)}</span>
+        <span>${escapeHtml(data.industry)} · ${escapeHtml(data.platform)} · ${escapeHtml(data.duration)} · ${escapeHtml(data.tone)}</span>
       </div>
     </div>
     <div class="notice">
-      Cada opción utiliza un ángulo diferente. Puedes copiarla tal como está o usarla como base para tu grabación.
+      Los 5 guiones usan enfoques diferentes y toman en cuenta el cliente ideal, su necesidad, el diferencial, el tono y el objetivo del video.
     </div>
     ${scripts.map((s,i)=>`
       <article class="script-card">
@@ -723,12 +995,16 @@ function renderScripts(scripts, data){
           <p class="hook">${escapeHtml(s.hook)}</p>
         </div>
         <div class="section">
-          <div class="section-title">Desarrollo</div>
+          <div class="section-title">Guion</div>
           <p>${escapeHtml(s.body)}</p>
         </div>
         <div class="section">
           <div class="section-title">CTA</div>
           <p>${escapeHtml(s.cta)}</p>
+        </div>
+        <div class="section">
+          <div class="section-title">Texto sugerido en pantalla</div>
+          <p>${escapeHtml(s.screen)}</p>
         </div>
         <div class="section">
           <div class="section-title">Recomendación visual</div>
@@ -744,70 +1020,67 @@ function renderScripts(scripts, data){
   `;
 }
 
-function escapeHtml(str){
-  return str.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
-}
+let currentScripts=[];
+let currentData=null;
 
-let currentScripts = [];
-let currentData = null;
-
-window.copyScript = async function(i){
-  const txt = scriptToText(currentScripts[i]);
-  await navigator.clipboard.writeText(txt);
+window.copyScript=async function(i){
+  await navigator.clipboard.writeText(scriptToText(currentScripts[i]));
   showToast("Guion copiado");
-}
+};
 
-window.regenerate = function(i){
-  const alternatives = [
-    `¿Y si este fuera el momento ideal para probar ${currentData.offer}?`,
-    `Si estabas esperando una señal para mejorar este aspecto, aquí la tienes.`,
-    `Tenemos una opción pensada para quienes quieren un resultado visible y una experiencia sencilla.`
-  ];
-  currentScripts[i].hook = alternatives[i % alternatives.length];
-  currentScripts[i].body = `${capitalize(currentData.offer)} puede ser una alternativa para ayudarte a ${goalPhrase(currentData.objective)}. ${promoSentence(currentData)} ${urgencySentence(currentData)} ${benefitSentence(currentData)}`.replace(/\s+/g," ").trim();
+window.regenerate=function(i){
+  const available=angles.filter(a=>!currentScripts.some((s,idx)=>idx!==i && s.angle===a.name));
+  const next=available[(hashText(currentData.offer)+i+Date.now())%available.length] || angles[(i+5)%angles.length];
+  currentScripts[i]=buildScript(currentData,next,i+3);
   renderScripts(currentScripts,currentData);
-  showToast("Guion regenerado");
-}
+  showToast("Nueva versión generada");
+};
 
-window.shortenScript = function(i){
-  const s = currentScripts[i];
-  s.hook = shorten(s.hook,90);
-  s.body = shorten(s.body,190);
-  s.visual = shorten(s.visual,125);
+window.shortenScript=function(i){
+  const s=currentScripts[i];
+  s.hook=shorten(s.hook,82);
+  s.body=shorten(s.body,190);
+  s.visual=shorten(s.visual,125);
   renderScripts(currentScripts,currentData);
   showToast("Versión más corta creada");
-}
+};
 
-form.addEventListener('submit', e=>{
+form.addEventListener("submit",e=>{
   e.preventDefault();
-
-  const data = {
-    industry:value('industry'),
-    offer:value('offer'),
-    objective:value('objective'),
-    topic:value('topic'),
-    must:value('must'),
-    details:value('details'),
-    platform:value('platform'),
-    duration:value('duration'),
-    style:value('style'),
-    cta:value('cta')
+  const data={
+    industry:value("industry"),
+    offer:value("offer"),
+    audience:value("audience"),
+    pain:value("pain"),
+    differentiator:value("differentiator"),
+    objective:value("objective"),
+    topic:value("topic"),
+    must:value("must"),
+    details:value("details"),
+    avoid:value("avoid"),
+    platform:value("platform"),
+    duration:value("duration"),
+    style:value("style"),
+    tone:value("tone"),
+    offerPosition:value("offerPosition"),
+    cta:value("cta")
   };
 
-  emptyState.style.display='none';
-  resultContent.style.display='none';
-  loadingState.style.display='grid';
+  emptyState.style.display="none";
+  resultContent.style.display="none";
+  loadingState.style.display="grid";
 
   setTimeout(()=>{
-    currentData = data;
-    currentScripts = angleLibrary.map((a,i)=>buildScript(data,a,i));
-    loadingState.style.display='none';
-    resultContent.style.display='block';
+    currentData=data;
+    const selected=chooseAngles(data);
+    currentScripts=selected.map((a,i)=>buildScript(data,a,i));
+    loadingState.style.display="none";
+    resultContent.style.display="block";
     renderScripts(currentScripts,data);
-    if(window.innerWidth < 960){
-      document.querySelector('.panel:last-child').scrollIntoView({behavior:'smooth',block:'start'});
+    if(window.innerWidth<960){
+      document.querySelector(".panel:last-child").scrollIntoView({behavior:"smooth",block:"start"});
     }
-  },750);
+  },650);
 });
 </script>
 </body>
